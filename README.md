@@ -19,26 +19,75 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 
 ## Installation
 
-### Skills CLI
+The repo root is itself a valid skill directory (`SKILL.md` at the top), so for every harness the install is: clone into that harness's skills folder.
+
+### One-command (skills.sh CLI)
 
 ```bash
-npx skills add acchuang/zh-tw-humanizer --global
+npx skills add acchuang/zh-tw-humanizer --global           # all configured harnesses
+npx skills add acchuang/zh-tw-humanizer --global --agent claude-code   # one harness
+npx skills update zh-tw-humanizer --global                 # update
 ```
 
-### Manual
-
-The runtime artifact is `SKILL.md`. Install it wherever your harness expects skill directories:
+### Claude Code
 
 ```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git
-mkdir -p /path/to/your/skills/zh-tw-humanizer
-cp zh-tw-humanizer/SKILL.md /path/to/your/skills/zh-tw-humanizer/
+# personal skills (all projects)
+git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.claude/skills/zh-tw-humanizer
+# or project-level: .claude/skills/zh-tw-humanizer/
 ```
 
-Or clone directly:
+### Pi
+
+```bash
+# global
+git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.agents/skills/zh-tw-humanizer
+# or ~/.pi/agent/skills/zh-tw-humanizer/
+# project-level: .pi/skills/ or .agents/skills/ (in the project dir)
+```
+
+Restart the session after installing. The skill then loads on-demand and registers as `/skill:zh-tw-humanizer`.
+
+### OpenAI Codex CLI
+
+Codex reads user skills from `~/.agents/skills/` (same location as Pi) and repo skills from `.agents/skills/` — so the Pi install above works for Codex too:
+
+```bash
+git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.agents/skills/zh-tw-humanizer
+```
+
+Optional: pin or disable it in `~/.codex/config.toml`:
+
+```toml
+[[skills.config]]
+path = "/Users/you/.agents/skills/zh-tw-humanizer/SKILL.md"
+enabled = true
+```
+
+Restart Codex after changing the config.
+
+### OpenCode
+
+```bash
+# global
+mkdir -p ~/.config/opencode/skills
+git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.config/opencode/skills/zh-tw-humanizer
+# project-level: .opencode/skills/zh-tw-humanizer/ (or .claude/skills/, .agents/skills/)
+```
+
+### Gemini CLI
+
+```bash
+git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.gemini/skills/zh-tw-humanizer
+# ~/.agents/skills/ also works as an alias
+# project-level: .gemini/skills/ or .agents/skills/
+```
+
+### Other Agent Skills-compatible harnesses (Cursor, Windsurf, …)
 
 ```bash
 git clone https://github.com/acchuang/zh-tw-humanizer.git /path/to/your/skills/zh-tw-humanizer
+# or just copy SKILL.md into the harness's skills directory
 ```
 
 ## Usage
