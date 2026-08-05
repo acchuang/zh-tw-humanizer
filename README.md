@@ -71,6 +71,27 @@ Provide a sample of the author's writing and the skill matches sentence rhythm, 
 [paste AI text to humanize]
 ```
 
+## Research references
+
+### AI-writing tells (Chinese)
+
+- **維基百科：AI生成文的特徵** (zh-TW) — the Traditional-Chinese counterpart of "Signs of AI writing"; source of the Chinese-specific word lists (穩/接住/見證/至關重要…), 排比句濫用, 破折號濫用, 列表式行文, and numbered-header patterns. https://zh.wikipedia.org/zh-tw/Wikipedia:AI生成文的特徵
+- **維基百科：Signs of AI writing** (en, WikiProject AI Cleanup) — the structural backbone: significance inflation, rule of three, copula avoidance, false ranges, and the cluster-based detection guidance. https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+- **數位時代「AI 味」系列（2025）** — Taiwanese editor's view: 對仗句上癮（不是 X，而是 Y）、金句堆疊與「氣味」測試（能不能拍成電影）、概念名詞化（○○感/○○性/○○化）. https://www.bnext.com.tw/article/89827/ai-writing-style-unique-features-avoiding-tips · https://www.bnext.com.tw/article/90761/how-to-fix-ai-writing-style
+- **經理人月刊：維基百科不忍了！公布「抓包 AI 味指南」** — zh-TW summary of the Wikipedia guide (AI 詞彙黑名單、6 句型/語氣/格式). https://www.managertoday.com.tw/articles/view/71293
+
+### Taiwanese Mandarin style
+
+- **教育部《國語辭典簡編本》附錄：兩岸常用詞語對照表** — authoritative 大陸 vs 台灣 vocabulary pairs (basis of the 48-row localization table). https://dict.concised.moe.edu.tw/appendix.jsp?ID=54
+- **中華語文知識庫：兩岸差異用詞**（中華文化總會） — cross-strait difference-word database. https://chinese-linguipedia.org/search_difference.html
+- **vocus：如何分辨台灣腔？** — 台灣華語特色：輕聲、語助詞、台式詞彙（便當/飯店）、中英夾雜（cancel/confirm/case by case）. https://vocus.cc/article/65f14d07fd8978000132eed9
+- **台味語助詞教學** — 蛤/蝦/餒/唷 等台式語助詞用法。 https://marstininuk.wordpress.com/2018/09/14/台味語助詞教學：輕鬆學會道地台灣腔/
+
+### Cross-strait vocabulary (secondary)
+
+- **漢語地區用詞差異列表**（維基百科） — 大陸/港澳/臺灣/馬新 four-region comparison. https://zh.wikipedia.org/zh-tw/漢語地區用詞差異列表
+- **兩岸三地用詞差異：軟件/軟體、激光/雷射** — tech-domain mapping (服務器/伺服器, 內存/記憶體…). https://www.toolbox365.cn/tutorials/zh-vocabulary-mainland-taiwan-hk/
+
 ## License
 
 MIT
