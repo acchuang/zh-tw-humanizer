@@ -8,7 +8,7 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 
 ## What it covers
 
-- **33 AI writing patterns in Chinese**: 假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、聊天機器人痕跡…
+- **48 AI writing patterns in Chinese** (4 categories): 假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
 - **Taiwan-only localization layer**:
   - 48 組大陸用語 → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
@@ -16,6 +16,10 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 - **No-fabrication rule**: rewrites never add facts, names, dates, or citations that aren't in the source text.
 - **False-positive guidance**: 什麼樣的人類文字不該被改（論文、單一破折號、句中「老實說」、港澳馬新中文…）
 - **Voice calibration**: provide a sample of the author's own writing and the rewrite matches it instead of producing generic "clean" output.
+- **Protected spans**: prices, proper nouns, links, quotes, and legal terms are locked and never touched during rewriting.
+- **Scene-based intensity**: different genres get different treatment (social posts rewritten heavily, technical docs kept conservative).
+- **Annotation mode**: "先標問題不要改" lists problems without rewriting — for reviewing others' drafts.
+- **Pre-delivery quality self-check**: a 5-dimension 50-point score (information, no-fabrication, Taiwan-correct, rhythm, personality); below 35 it isn't delivered.
 
 ## Installation
 
