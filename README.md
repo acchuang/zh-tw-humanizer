@@ -1,4 +1,6 @@
-# zh-tw-humanizer：台式中文去 AI 味編輯
+# zh-tw-humanizer
+
+**繁體中文版 README → [README.zh-TW.md](README.zh-TW.md)**
 
 A portable agent skill that removes signs of AI-generated writing from Traditional Chinese text and localizes it to **Taiwanese Mandarin** — Taiwan vocabulary (影片/軟體/網路/資料, never 視頻/軟件/網絡/數據), Taiwanese tone, particles, and natural sentence rhythm. It never outputs simplified Chinese or mainland-style phrasing.
 
@@ -93,79 +95,6 @@ git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.gemini/skills/zh-tw
 ```bash
 git clone https://github.com/acchuang/zh-tw-humanizer.git /path/to/your/skills/zh-tw-humanizer
 # or just copy SKILL.md into the harness's skills directory
-```
-
-## 安裝說明（繁體中文）
-
-這個 repo 的根目錄本身就是一個合格的 skill 目錄（`SKILL.md` 在最上層），所以每個工具要裝的方式都一樣：把 repo clone 到該工具讀取 skill 的資料夾即可。
-
-### 一行安裝（skills.sh CLI）
-
-```bash
-npx skills add acchuang/zh-tw-humanizer --global           # 安裝到所有有設定的工具
-npx skills add acchuang/zh-tw-humanizer --global --agent claude-code   # 只裝到指定工具
-npx skills update zh-tw-humanizer --global                 # 更新
-```
-
-### Claude Code
-
-```bash
-# 個人 skill（所有專案共用）
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.claude/skills/zh-tw-humanizer
-# 或放在專案層級：.claude/skills/zh-tw-humanizer/
-```
-
-### Pi
-
-```bash
-# 全域
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.agents/skills/zh-tw-humanizer
-# 或 ~/.pi/agent/skills/zh-tw-humanizer/
-# 專案層級：.pi/skills/ 或 .agents/skills/（放在專案資料夾內）
-```
-
-安裝完重開 session 就會生效，之後可透過 `/skill:zh-tw-humanizer` 直接呼叫。
-
-### OpenAI Codex CLI
-
-Codex 的使用者 skill 放在 `~/.agents/skills/`（跟 Pi 同一個位置），專案 skill 放在 `.agents/skills/`——所以上面 Pi 的裝法 Codex 也適用：
-
-```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.agents/skills/zh-tw-humanizer
-```
-
-也可以選擇在 `~/.codex/config.toml` 裡指定或停用：
-
-```toml
-[[skills.config]]
-path = "/Users/你/你的家目錄/.agents/skills/zh-tw-humanizer/SKILL.md"
-enabled = true
-```
-
-改完設定後重開 Codex。
-
-### OpenCode
-
-```bash
-# 全域
-mkdir -p ~/.config/opencode/skills
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.config/opencode/skills/zh-tw-humanizer
-# 專案層級：.opencode/skills/zh-tw-humanizer/（或 .claude/skills/、.agents/skills/）
-```
-
-### Gemini CLI
-
-```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.gemini/skills/zh-tw-humanizer
-# ~/.agents/skills/ 也可以，Gemini 支援這個別名
-# 專案層級：.gemini/skills/ 或 .agents/skills/
-```
-
-### 其他支援 Agent Skills 的工具（Cursor、Windsurf 等）
-
-```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git /path/to/你的/skills/zh-tw-humanizer
-# 或直接把 SKILL.md 複製到該工具的 skills 資料夾
 ```
 
 ## Usage
