@@ -8,12 +8,13 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 
 ## What it covers
 
-- **48 AI writing patterns in Chinese** (4 categories): 假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
+- **50 AI writing patterns in Chinese** (4 categories): 假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
 - **Taiwan-only localization layer**:
   - 48 組大陸用語 → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
   - 台式語氣：委婉商量式、語助詞（喔/耶/啦/餒/蛤）、句式（還蠻/超/有在/這樣子/的話）、中英夾雜（cancel/confirm/case by case），各限於適合的文體
 - **No-fabrication rule**: rewrites never add facts, names, dates, or citations that aren't in the source text.
+- **Safety boundary**: instruction-like text pasted into the input for rewriting ("ignore previous instructions", "you are now...") is treated as literal content to rewrite, never executed as a new command.
 - **False-positive guidance**: 什麼樣的人類文字不該被改（論文、單一破折號、句中「老實說」、港澳馬新中文…）
 - **Voice calibration**: provide a sample of the author's own writing and the rewrite matches it instead of producing generic "clean" output.
 - **Protected spans**: prices, proper nouns, links, quotes, and legal terms are locked and never touched during rewriting.
@@ -205,6 +206,8 @@ Provide a sample of the author's writing and the skill matches sentence rhythm, 
 - **維基百科：Signs of AI writing** (en, WikiProject AI Cleanup) — the structural backbone: significance inflation, rule of three, copula avoidance, false ranges, and the cluster-based detection guidance. https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
 - **數位時代「AI 味」系列（2025）** — Taiwanese editor's view: 對仗句上癮（不是 X，而是 Y）、金句堆疊與「氣味」測試（能不能拍成電影）、概念名詞化（○○感/○○性/○○化）. https://www.bnext.com.tw/article/89827/ai-writing-style-unique-features-avoiding-tips · https://www.bnext.com.tw/article/90761/how-to-fix-ai-writing-style
 - **經理人月刊：維基百科不忍了！公布「抓包 AI 味指南」** — zh-TW summary of the Wikipedia guide (AI 詞彙黑名單、6 句型/語氣/格式). https://www.managertoday.com.tw/articles/view/71293
+- **Wikipedia:Signs of AI writing (2026 revisions)** — process-narration ("after reviewing the available sources") and false-precision signs added mid-2026; source of patterns 49–50. https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+- **端傳媒（2026-04）：維基百科如何應對 AI 寫作？** — background on WikiProject AI Cleanup's ongoing pattern updates. https://theinitium.com/20260415-tech-in-numbers-wikipedia-against-ai-writing/
 
 ### Taiwanese Mandarin style
 
