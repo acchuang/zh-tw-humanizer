@@ -10,7 +10,10 @@
 
 ## 涵蓋內容
 
-- **50 種中文 AI 寫作特徵**（4 大類）：假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
+- **56 種中文 AI 寫作特徵**（4 大類）：假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
+- **英文 humanizer 抓不到的中文專屬破綻**（1.3.0 新增）：翻譯腔句式（「最……之一」「當……的時候」「對 X 進行 Y」）、系動詞迴避（用「作為／扮演著……的角色」把一句「是」撐胖）、過度強調關注度（「引發熱議」「多家媒體報導」）、引用層破綻（死連結、DOI 檢查碼錯、造訪日期早於發表日）、列表式行文與行內粗體標題、標題結構與 Markdown 破綻（跳級標題、多個 H1、`---` 分隔線、中文裡的彎引號）。
+- **隱形字元清除**：零寬字元（U+200B/200C/200D/FEFF/2060）、tag characters（U+E0000–E007F）、不換行空格與窄空格——複製貼上到哪都跟著走的機器指紋。程式碼區塊、URL、全形標點不動。
+- **「規則腔」防呆**：規則套過頭會生出新的破綻（句句短、句句口語、每句都在示範某條規則），最後一關會檢查並放幾句原文回去。
 - **台灣專屬在地化層**：
   - 48 組大陸用語 → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
@@ -135,8 +138,12 @@ Humanize the prose in docs/launch-post.md
 - **維基百科：Signs of AI writing**（英文，WikiProject AI Cleanup）——結構性骨架：意義誇大、三段式修辭、避免用「是」的句法、假範圍，以及群集式判斷準則。https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
 - **數位時代「AI 味」系列（2025）**——台灣編輯視角：對仗句上癮（不是 X，而是 Y）、金句堆疊與「氣味」測試（能不能拍成電影）、概念名詞化（○○感/○○性/○○化）。https://www.bnext.com.tw/article/89827/ai-writing-style-unique-features-avoiding-tips · https://www.bnext.com.tw/article/90761/how-to-fix-ai-writing-style
 - **經理人月刊：維基百科不忍了！公布「抓包 AI 味指南」**——維基百科指南的繁中摘要（AI 詞彙黑名單、6 句型/語氣/格式）。https://www.managertoday.com.tw/articles/view/71293
-- **Wikipedia:Signs of AI writing（2026 年版本更新）**——過程敘事（「經過審視現有資料來源後」）與假精確特徵是 2026 年中新增的；特徵 49–50 的來源。https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+- **Wikipedia:Signs of AI writing（2026 年版本更新）**——過程敘事（「經過審視現有資料來源後」）與假精確特徵是 2026 年中新增的；特徵 55–56 的來源。https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
 - **端傳媒（2026-04）：維基百科如何應對 AI 寫作？**——WikiProject AI Cleanup 持續更新特徵清單的背景報導。https://theinitium.com/20260415-tech-in-numbers-wikipedia-against-ai-writing/
+- **高科大 AICT：去 AI 味完全指南 2026**——中文 AI 味的成因（公文語料佔比高＋翻譯腔），也是「英文 humanizer 處理中文效果差」的說明；特徵 17 的背景。https://aict.nkust.edu.tw/digitrans/?p=12219
+- **余光中〈怎樣改進英式中文？〉與相關翻譯腔整理**——「最……之一」「當……的時候」「對……進行」「多餘的和／以及」；特徵 17 的直接來源。https://zhuanlan.zhihu.com/p/72934908
+- **RAR 設計攻略：去 AI 味怎麼做才有效**——「規則腔」的來源：規則套過頭會生出新的破綻，工整得像在填表。https://rar.design/posts/de-ai-flavor-writing-skill-guide
+- **同類 skill 的隱形字元處理**（kevintsai1202/Humanizer-zh-TW 的 text-watermark-cleaner-zh-tw）——零寬字元、tag characters、異形空白清單；特徵 54 的來源。https://github.com/kevintsai1202/Humanizer-zh-TW
 
 ### 台灣國語風格
 
