@@ -1,5 +1,9 @@
 # zh-tw-humanizer
 
+[![npx skills add](https://img.shields.io/badge/npx_skills_add-acchuang%2Fzh--tw--humanizer-000000)](#installation)
+[![version](https://img.shields.io/badge/skill-v1.3.0-blue)](SKILL.md)
+[![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 **繁體中文版 README → [README.zh-TW.md](README.zh-TW.md)**
 
 A portable agent skill that removes signs of AI-generated writing from Traditional Chinese text and localizes it to **Taiwanese Mandarin** — Taiwan vocabulary (影片/軟體/網路/資料, never 視頻/軟件/網絡/數據), Taiwanese tone, particles, and natural sentence rhythm. It never outputs simplified Chinese or mainland-style phrasing.
@@ -26,6 +30,26 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 - **Scene-based intensity**: different genres get different treatment (social posts rewritten heavily, technical docs kept conservative).
 - **Annotation mode**: "先標問題不要改" lists problems without rewriting — for reviewing others' drafts.
 - **Pre-delivery quality self-check**: a 5-dimension 50-point score (information, no-fabrication, Taiwan-correct, rhythm, personality); below 35 it isn't delivered.
+
+## Before / after
+
+**Social post** — kills 假真誠開場白, 「最……之一」翻譯腔, 排比句, emoji 堆疊, 破折號濫用:
+
+> **前**：不得不說，這家咖啡廳真的是台北最療癒的空間之一 ✨ 不僅環境舒適、餐點美味，更是一個能讓靈魂沉澱的秘密基地！值得一提的是，他們的手沖咖啡——每一杯都承載著職人的堅持——絕對值得你專程前來。
+>
+> **後**：這家咖啡廳在巷子裡，位子不多，下午常常客滿。手沖是老闆自己烘的豆子，我點的耶加雪菲酸度偏高，喝起來有柑橘味。
+
+**Technical doc** (light intensity — commands and versions never touched) — kills 公式化開場, 系動詞迴避, 冗餘書面詞, 無主句:
+
+> **前**：在當今快速演進的技術環境中，Docker 作為容器化技術的重要解決方案，扮演著簡化部署流程的關鍵角色。使用者僅需執行相關指令即可輕鬆完成環境的建置。
+>
+> **後**：Docker 把應用程式和它的相依套件打包成容器，部署時不用再處理環境差異。建置環境只要一行：`docker compose up -d`
+
+**Newsletter** (CTA strength is a feature, not AI-flavor — it survives) — kills 罐頭客套, 空話動詞「賦能」, emoji, 空泛結尾:
+
+> **前**：親愛的訂閱者您好！首先，非常感謝您一直以來的支持。我們很高興地宣布，全新功能正式上線了 🎉 這項功能不僅能提升您的工作效率，更能為您的團隊賦能。期待與您共創美好未來！
+>
+> **後**：新功能上線了：現在可以一次匯出整個資料夾，不用一個一個點。這週開始所有方案都能用，用了有問題直接回信告訴我們。
 
 ## Installation
 
