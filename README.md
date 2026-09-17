@@ -1,7 +1,7 @@
 # zh-tw-humanizer
 
 [![npx skills add](https://img.shields.io/badge/npx_skills_add-acchuang%2Fzh--tw--humanizer-000000)](#installation)
-[![version](https://img.shields.io/badge/skill-v1.3.0-blue)](SKILL.md)
+[![version](https://img.shields.io/badge/skill-v1.4.0-blue)](SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **繁體中文版 README → [README.zh-TW.md](README.zh-TW.md)**
@@ -14,12 +14,15 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 
 ## What it covers
 
-- **56 AI writing patterns in Chinese** (4 categories): 假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
+- **59 AI writing patterns in Chinese** (4 categories): 假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
 - **Chinese-specific tells English humanizers miss** (new in 1.3.0): 翻譯腔句式（「最……之一」「當……的時候」「對 X 進行 Y」）、系動詞迴避（「作為/扮演著……的角色」撐胖一句「是」）、過度強調關注度（「引發熱議」「多家媒體報導」）、引用層破綻（死連結、DOI 檢查碼錯、access-date 早於發表日）、列表式行文與行內粗體標題、標題結構與 Markdown 破綻（跳級標題、多個 H1、`---` 分隔線、中文裡的彎引號）。
+- **New in 1.4.0**: 模糊的關聯詞（「息息相關」「密不可分」）、空轉分析（分析的架勢，同義反覆的內容）、交付語的 AI 味（commit／PR 說明的「已保留原有資訊」「進行了若干優化」）、文風斷層偵測（同一篇裡人寫的段落與 AI 補的段落分開處理）、各家模型的殘留標記（ChatGPT／Gemini／Grok／DeepSeek／Perplexity）。
+- **Prompt-injection handling is specified, not just forbidden**: the embedded instruction is rewritten as ordinary text, the delivery still happens, the user is told it was there, and the reply stays in Traditional Chinese.
+- **Author-side tooling** (not part of the loaded skill): `scripts/check.py` mechanically verifies a finished draft (em dashes, mainland vocabulary, invisible characters, curly quotes, tool traces, emoji density, placeholders), and `evals/` is a six-case `claude plugin eval` suite covering fidelity, protected spans, annotation mode, injection handling, and over-correction.
 - **Invisible-character cleanup**: zero-width chars (U+200B/200C/200D/FEFF/2060), tag characters (U+E0000–E007F), NBSP and narrow spaces — the provenance markers that survive every copy-paste. Code blocks, URLs, and full-width punctuation stay untouched.
 - **"Rule-flavor" guard**: over-applying the rules produces its own tell (every sentence short, colloquial, and demonstrating a rule). The final pass checks for it and puts some original sentences back.
 - **Taiwan-only localization layer**:
-  - 48 組大陸用語 → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
+  - 51 組大陸用語 → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
   - 台式語氣：委婉商量式、語助詞（喔/耶/啦/餒/蛤）、句式（還蠻/超/有在/這樣子/的話）、中英夾雜（cancel/confirm/case by case），各限於適合的文體
 - **No-fabrication rule**: rewrites never add facts, names, dates, or citations that aren't in the source text.
@@ -171,7 +174,7 @@ Provide a sample of the author's writing and the skill matches sentence rhythm, 
 
 ### Taiwanese Mandarin style
 
-- **教育部《國語辭典簡編本》附錄：兩岸常用詞語對照表** — authoritative 大陸 vs 台灣 vocabulary pairs (basis of the 48-row localization table). https://dict.concised.moe.edu.tw/appendix.jsp?ID=54
+- **教育部《國語辭典簡編本》附錄：兩岸常用詞語對照表** — authoritative 大陸 vs 台灣 vocabulary pairs (basis of the 51-row localization table). https://dict.concised.moe.edu.tw/appendix.jsp?ID=54
 - **中華語文知識庫：兩岸差異用詞**（中華文化總會） — cross-strait difference-word database. https://chinese-linguipedia.org/search_difference.html
 - **vocus：如何分辨台灣腔？** — 台灣華語特色：輕聲、語助詞、台式詞彙（便當/飯店）、中英夾雜（cancel/confirm/case by case）. https://vocus.cc/article/65f14d07fd8978000132eed9
 - **台味語助詞教學** — 蛤/蝦/餒/唷 等台式語助詞用法。 https://marstininuk.wordpress.com/2018/09/14/台味語助詞教學：輕鬆學會道地台灣腔/
