@@ -15,7 +15,7 @@ description: |
   也用在改寫中文的公告、客戶信、電子報、貼文、README 時。
 license: MIT
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # 台式中文去 AI 味編輯（Taiwanese Chinese Humanizer）
@@ -339,6 +339,18 @@ metadata:
 **後**：
 > 這家店假日總是大排長龍，十一點開門，十點半就有人在等。
 
+### 60. 虛假範圍（從 X 到 Y）
+
+**注意詞**：從 X 到 Y、從……到……不等。
+
+**問題**：AI 用「從 X 到 Y」硬湊出一種「涵蓋範圍很廣」的感覺，但 X 跟 Y 常常沒什麼關係，只是兩個聽起來對稱的詞硬接在一起，讀者拿不到任何具體資訊。判斷法：把「從」和「到」拿掉，X 和 Y 單獨站得住腳嗎？站不住就是湊出來的。
+
+**前**：
+> 這款工具的定位，從解決日常問題的實用工具，到激發科學發現的藝術表達，涵蓋了多重面向。
+
+**後**：
+> 這款工具能解決日常的小問題，也有人拿它做研究用的視覺化。
+
 ## 語言與文法模式
 
 ### 16. 系動詞迴避（把「是」藏起來）
@@ -475,6 +487,8 @@ metadata:
 **後**：
 > 這家店的排骨飯很有名，湯頭也不錯，假日總是大排長龍。
 
+**注意**：這是舊款 AI 模型的重複懲罰留下的痕跡，新模型已經沒那麼明顯，非母語作者本來也常刻意避免重複用詞（例如受英文/日文教育影響）。單獨出現不算數，要配其他破綻（見「檢測指引」）才判定為 AI。
+
 ### 27. 破折號濫用（——）
 
 **規則**：最終稿不得出現破折號「——」或雙連字號「--」。破折號是 AI 最可靠的破綻之一，這是硬規則，不是「少用」建議。替換順序：句號（開新句）、逗號、冒號、括號、重組句子。
@@ -521,7 +535,7 @@ metadata:
 
 ### 31. 過度修飾副詞
 
-**注意詞**：相當、非常、十分、極其、頗為、眾多、大量、高度、極度。
+**注意詞**：相當、非常、十分、極其、頗為、眾多、大量、高度、極度、最（堆疊使用時，如「最可愛、最珍貴、最憨態可掬」一句三個最）。
 
 **問題**：AI 每句話都想強調。台灣人寫作修飾詞密度低很多。
 
@@ -908,6 +922,9 @@ metadata:
 以下是**不是** AI 破綻的，先檢查再動手，不要把人家的好文章改壞：
 
 - **書面語與正式文體**。論文、新聞稿、公文用書面語是對的。乾乾淨淨的文法不是 AI 證據。
+- **完美文法**。很多人本來就寫得一手好文章，不是只有 AI 才不出錯。
+- **正式和口語混雜、或讀起來忽冷忽熱**。可能是理工背景的人寫作習慣，也可能是好幾個人接力寫的文件，不是 AI 的專利。
+- **單獨一兩個轉折詞**（此外、然而、值得注意的是）。AI 是整篇堆這些詞才算數，偶爾一次是正常中文，很多書寫規範本來就教人用轉折詞開頭。
 - **單一破折號**。台灣編輯和作家也會用，要配其他破綻才算數。
 - **句中「老實說」「其實」「不過」**。正常中文。破綻是獨立成句的舞台式開場。
 - **偶爾一次「此外」「然而」**。破綻是整篇堆。
@@ -945,6 +962,8 @@ metadata:
 - 高科大資料治理與數位轉型產學聯盟：[去 AI 味完全指南 2026](https://aict.nkust.edu.tw/digitrans/?p=12219)（中文 AI 味成因：公文語料佔比高＋翻譯腔，所以英文工具處理不了）
 - 余光中：〈怎樣改進英式中文？〉（翻譯腔的經典分析，「之一」「當……的時候」「進行」）
 - RAR 設計攻略：[去 AI 味怎麼做才有效](https://rar.design/posts/de-ai-flavor-writing-skill-guide)（「規則腔」的來源：規則套過頭會生出新的破綻）
+- 36氪／有三思 U Sense：[消除「罪證」：給寫作去除「AI 味」的不完全手冊（2026 版）](https://36kr.com/p/3824601267196037)（虛假範圍「從 X 到 Y」、「最」字堆疊、誤判案例）
+- Wikipedia：[Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) 2026 年版新增「Ineffective indicators」與「Historical indicators」兩節，同義詞輪換等舊破綻的可信度被下修
 - 同類開源 skill 參考：[blader/humanizer](https://github.com/blader/humanizer)、[Raymondhou0917/speak-human-tw](https://github.com/Raymondhou0917/speak-human-tw)、[tentenco/shuorenhua-zh-tw](https://github.com/tentenco/shuorenhua-zh-tw)、[kevintsai1202/Humanizer-zh-TW](https://github.com/kevintsai1202/Humanizer-zh-TW)、[nagameTW/humanizer-zh-tw](https://github.com/nagameTW/humanizer-zh-tw)、[yelban/humanizer.TW](https://github.com/yelban/humanizer.tw)、[op7418/Humanizer-zh](https://github.com/op7418/humanizer-zh)
 
 核心洞見：「LLM 用統計猜下一個字，所以結果趨向『最統計可能、適用最多情況』的寫法——也就是最沒有個性的寫法。台灣人的文字有氣味、有態度、有方言和英語的痕跡，這些正是 AI 學不會的部分。」
