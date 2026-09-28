@@ -22,15 +22,19 @@ at `~/.agents/skills/zh-tw-humanizer/SKILL.md`.
   - `scripts/check.py` — mechanical break-check (em dashes, mainland vocabulary, invisible
     characters, curly quotes, tool traces, emoji density, placeholders). It parses the
     vocabulary table straight out of `SKILL.md` pattern 34; never copy that table anywhere else.
+  - `scripts/verify_semantic.py` — semantic fidelity & Taiwanese naturalness check powered by
+    TypeSafe AI System One (`jev-latest`). Verifies no-fabrication and fact preservation.
   - `evals/` — `claude plugin eval .` suite. Run it after any meaningful `SKILL.md` change.
 - No fabrication rule and Taiwanese-Mandarin-only output are core contracts — do not weaken them in edits.
 
 ## Checks
 
 ```bash
-python3 scripts/check.py --self-test          # checker's own tests
-python3 scripts/check.py <draft.md>           # exit 1 if mechanical breaks remain
-claude plugin eval . --runs 1 --no-publish    # skill behaviour, ~$0.7 per full pass
+python3 scripts/check.py --self-test            # checker's own tests
+python3 scripts/check.py <draft.md>             # exit 1 if mechanical breaks remain
+python3 scripts/verify_semantic.py --self-test  # semantic verifier self-test
+python3 scripts/verify_semantic.py <orig.md> <draft.md> # TypeSafe AI semantic verification
+claude plugin eval . --runs 1 --no-publish      # skill behaviour, ~$0.7 per full pass
 ```
 
 兩個已知不穩定的案例，不要當成迴歸就急著調 grader：
