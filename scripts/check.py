@@ -4,10 +4,14 @@
 用法：
     python3 scripts/check.py 最終稿.md
     cat 最終稿.md | python3 scripts/check.py
+    python3 scripts/check.py --source 原稿.md 最終稿.md   # 另外比對事實有沒有掉、有沒有憑空多
     python3 scripts/check.py --self-test
 
 只檢查「查得準」的規則：破折號、大陸用語、隱形字元、彎引號、工具痕跡、
 emoji 密度、佔位文字。語氣、節奏、人味這種要判斷的，機器不管。
+--source 模式再加一道事實比對：原稿的數字、日期、版本、網址、信箱、代碼、
+「」引文、程式碼，改寫後要原樣在；改寫後出現原稿沒有的數字、網址、信箱、代碼，
+就是捏造。中文數字（三成）換成阿拉伯數字（30%）會被當成新增，這是已知的誤報。
 大陸用語表直接從 SKILL.md 模式 34 讀，不在這裡重抄一份。
 """
 
@@ -133,6 +137,54 @@ def scan(text, vocab=None):
     return sorted(hits)
 
 
+URL_RE = re.compile(r"https?://[^\s)）」』>\]]+")
+EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+DATE_RE = re.compile(r"\d{4}\s*年\s*\d{1,2}\s*月(?:\s*\d{1,2}\s*日)?|\d{1,2}\s*月\s*\d{1,2}\s*日")
+VERSION_RE = re.compile(r"\bv?\d+(?:\.\d+){2,}\b")
+NUMBER_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")
+CODE_RE = re.compile(r"\b(?=[A-Z0-9]*[A-Z])(?=[A-Z0-9]*\d)[A-Z][A-Z0-9]{3,}\b")
+QUOTE_RE = re.compile(r"「[^」]+」|『[^』]+』")
+FENCE_RE = re.compile(r"^```.*?^```|`[^`\n]+`", re.S | re.M)
+
+
+def facts(text):
+    """抽出改寫不該動、也不該憑空多出來的事實。回傳 {類別: set}。"""
+    out = {k: set() for k in ("引文", "程式碼", "網址", "信箱", "日期", "版本", "代碼", "數字")}
+    out["引文"] = {re.sub(r"\s+", "", q) for q in QUOTE_RE.findall(text)}
+    out["程式碼"] = {c.strip("`\n ") for c in FENCE_RE.findall(text)}
+    # 抽過的就換成空白，避免同一段被後面的規則重複算
+    def take(rx, key, norm=lambda x: x):
+        nonlocal text
+        for m in rx.finditer(text):
+            out[key].add(norm(m.group(0)))
+        text = rx.sub(lambda m: " " * len(m.group(0)), text)
+
+    text = FENCE_RE.sub(lambda m: " " * len(m.group(0)), text)
+    take(URL_RE, "網址", lambda u: u.rstrip(".,;:。，；：！？"))
+    take(EMAIL_RE, "信箱", str.lower)
+    take(DATE_RE, "日期", lambda d: re.sub(r"\s+", "", d))
+    take(VERSION_RE, "版本", lambda v: v.lstrip("v"))
+    take(CODE_RE, "代碼")
+    # 條列編號和標題記號不是事實
+    text = re.sub(r"^\s*(?:\d+[.)、]|#+)\s", "", text, flags=re.M)
+    take(NUMBER_RE, "數字", lambda n: n.replace(",", ""))
+    return out
+
+
+def compare(source, draft):
+    """回傳 [(規則, 說明)]：原稿的事實掉了、或改寫憑空多了。"""
+    src, new = facts(source), facts(draft)
+    hits = []
+    for kind, items in src.items():
+        for item in sorted(items - new[kind]):
+            hits.append(("遺失事實", f"{kind}{item}原稿有，改寫後不見了"))
+    # 引文與程式碼是原樣保留的對象，改寫後多出來的不算捏造；其餘多出來的算
+    for kind in ("網址", "信箱", "日期", "版本", "代碼", "數字"):
+        for item in sorted(new[kind] - src[kind]):
+            hits.append(("新增事實", f"{kind}{item}原稿沒有，疑似捏造"))
+    return hits
+
+
 def report(name, text):
     hits = scan(text)
     for line, col, rule, note in hits:
@@ -161,6 +213,21 @@ def self_test():
     assert rules("感謝您對【公司名稱】的支持") == {"佔位文字"}
     # 行號要對
     assert scan("正常\n這個軟件", vocab)[0][0] == 2
+    # 事實比對
+    src = ("2026 年 10 月 1 日起年費由 NT$1,280 調整為 NT$1,580，優惠碼 EARLY2026，"
+           "見 https://a.com/x 或 a@b.com。條款：「已付款者不受影響。」")
+    ok = ("自 2026年10月1日 起年費從 NT$1,280 調到 NT$1,580，優惠碼 EARLY2026，"
+          "細節 https://a.com/x ，信箱 a@b.com。條款：「已付款者不受影響。」")
+    assert compare(src, ok) == [], compare(src, ok)
+    # 日期縮水（protected-spans 案例實際發生過的失敗）
+    cut = ok.replace("2026年10月1日", "10月1日")
+    assert any(r == "遺失事實" and "日期" in n for r, n in compare(src, cut))
+    # 引文被改寫
+    assert any("引文" in n for r, n in compare(src, ok.replace("已付款者", "付過款的人")))
+    # 憑空多出來的精確數字
+    assert any(r == "新增事實" and "73.6" in n for r, n in compare(src, ok + "有 73.6% 的人同意。"))
+    # 條列編號不算新增數字
+    assert compare("甲乙", "1. 甲\n2. 乙") == []
     # 真的讀得到 SKILL.md 的表
     real = load_vocab()
     assert len(real) >= 45, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
@@ -171,6 +238,23 @@ def self_test():
 def main(argv):
     if "--self-test" in argv:
         self_test()
+        return 0
+    if "--source" in argv:
+        i = argv.index("--source")
+        if len(argv) != i + 3 or i != 0:
+            print("用法：check.py --source 原稿.md 最終稿.md", file=sys.stderr)
+            return 2
+        src_path, draft_path = argv[1], argv[2]
+        source = Path(src_path).read_text(encoding="utf-8")
+        draft = Path(draft_path).read_text(encoding="utf-8")
+        total = report(draft_path, draft)
+        for rule, note in compare(source, draft):
+            print(f"{draft_path}  {rule}  {note}")
+            total.append(rule)
+        if total:
+            print(f"\n{len(total)} 個破綻。改完再交稿。", file=sys.stderr)
+            return 1
+        print("機械檢查與事實比對通過（語氣、節奏、人味請自己看）。", file=sys.stderr)
         return 0
     paths = [a for a in argv if not a.startswith("-")]
     total = []
