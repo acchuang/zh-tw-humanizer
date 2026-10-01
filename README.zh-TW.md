@@ -67,6 +67,13 @@ npx skills add acchuang/zh-tw-humanizer --global --agent claude-code   # 只裝�
 npx skills update zh-tw-humanizer --global                 # 更新
 ```
 
+### Claude Code 外掛市集
+
+```
+/plugin marketplace add acchuang/zh-tw-humanizer
+/plugin install zh-tw-humanizer@zh-tw-humanizer
+```
+
 ### Claude Code
 
 ```bash
