@@ -12,6 +12,16 @@ Plain Markdown, so it runs in any harness that supports skill-style instructions
 
 Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) guide and the zh-TW [AI生成文的特徵](https://zh.wikipedia.org/zh-tw/Wikipedia:AI%E7%94%9F%E6%88%90%E6%96%87%E7%9A%84%E7%89%B9%E5%BE%B5) essay, extended with Taiwanese-Mandarin localization rules (兩岸用語差異、語助詞、台式語氣).
 
+## Measured, not just claimed
+
+The pitch is that a rewrite changes the voice and nothing else: no invented facts, no lost facts, no over-editing. That is tested, not asserted.
+
+- **30-case eval suite** (`evals/`): blog, tech docs, business email, e-commerce, press release, academic, prompt injection. Seeded numbers, dates, URLs, codes and quotes are checked by regex, so most grading needs no LLM judge.
+- **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.91 vs 0.77**, the skill ahead in 22 of 30 cases, tied in 7, behind in 1.
+- **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite. Offline, no API calls.
+
+Per-case numbers, caveats and the one case the skill loses are in [BENCHMARK.md](BENCHMARK.md). Single run per case, default model only.
+
 ## What it covers
 
 - **60 AI writing patterns in Chinese** (4 categories): 假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
