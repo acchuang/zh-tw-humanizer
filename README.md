@@ -23,7 +23,7 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 - **Invisible-character cleanup**: zero-width chars (U+200B/200C/200D/FEFF/2060), tag characters (U+E0000–E007F), NBSP and narrow spaces — the provenance markers that survive every copy-paste. Code blocks, URLs, and full-width punctuation stay untouched.
 - **"Rule-flavor" guard**: over-applying the rules produces its own tell (every sentence short, colloquial, and demonstrating a rule). The final pass checks for it and puts some original sentences back.
 - **Taiwan-only localization layer**:
-  - 51 組大陸用語 → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
+  - 157 組大陸用語（含「台灣也用」不誤殺清單） → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
   - 台式語氣：委婉商量式、語助詞（喔/耶/啦/餒/蛤）、句式（還蠻/超/有在/這樣子/的話）、中英夾雜（cancel/confirm/case by case），各限於適合的文體
 - **No-fabrication rule**: rewrites never add facts, names, dates, or citations that aren't in the source text.
@@ -175,7 +175,7 @@ Provide a sample of the author's writing and the skill matches sentence rhythm, 
 
 ### Taiwanese Mandarin style
 
-- **教育部《國語辭典簡編本》附錄：兩岸常用詞語對照表** — authoritative 大陸 vs 台灣 vocabulary pairs (basis of the 51-row localization table). https://dict.concised.moe.edu.tw/appendix.jsp?ID=54
+- **教育部《國語辭典簡編本》附錄：兩岸常用詞語對照表** — authoritative 大陸 vs 台灣 vocabulary pairs (basis of the 157-row localization table). https://dict.concised.moe.edu.tw/appendix.jsp?ID=54
 - **中華語文知識庫：兩岸差異用詞**（中華文化總會） — cross-strait difference-word database. https://chinese-linguipedia.org/search_difference.html
 - **vocus：如何分辨台灣腔？** — 台灣華語特色：輕聲、語助詞、台式詞彙（便當/飯店）、中英夾雜（cancel/confirm/case by case）. https://vocus.cc/article/65f14d07fd8978000132eed9
 - **台味語助詞教學** — 蛤/蝦/餒/唷 等台式語助詞用法。 https://marstininuk.wordpress.com/2018/09/14/台味語助詞教學：輕鬆學會道地台灣腔/

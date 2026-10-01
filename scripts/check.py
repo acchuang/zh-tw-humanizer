@@ -77,6 +77,15 @@ def load_vocab(skill_path=SKILL):
     return pairs
 
 
+def load_exempt(skill_path=SKILL):
+    """模式 34「台灣也用」清單：命中這些詞的片段不算大陸用語。"""
+    if not skill_path.exists():
+        return []
+    m = re.search(r"^\*\*台灣也用（不要改）\*\*：(.+)$",
+                  skill_path.read_text(encoding="utf-8"), re.M)
+    return [w.strip() for w in m.group(1).split("、") if w.strip()] if m else []
+
+
 def strip_protected(text):
     """把程式碼區塊、行內程式碼、URL 換成等長空白，位置不變，內容不掃。"""
     def blank(m):
@@ -117,8 +126,12 @@ def scan(text, vocab=None):
     for m in re.finditer(f'["\'](?=[{CJK}])|(?<=[{CJK}])["\']', prose):
         add(m.start(), "直引號", "模式 46：中文裡的英文引號，換成「」")
 
+    exempt = [m.span() for w in load_exempt()
+              for m in re.finditer(re.escape(w), prose)]
     for term, fix in vocab:
         for m in re.finditer(re.escape(term), prose):
+            if any(a <= m.start() and m.end() <= b for a, b in exempt):
+                continue
             add(m.start(), "大陸用語", f"模式 34：{term} → {fix}")
 
     for pattern, note in TOOL_TRACES:
@@ -230,8 +243,9 @@ def self_test():
     assert compare("甲乙", "1. 甲\n2. 乙") == []
     # 真的讀得到 SKILL.md 的表
     real = load_vocab()
-    assert len(real) >= 45, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
+    assert len(real) >= 150, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
     assert ("視頻", "影片") in real
+    assert not scan("用戶端與大數據", real) and scan("通過考試的用戶", real)
     print(f"self-test ok（大陸用語表 {len(real)} 組）")
 
 
