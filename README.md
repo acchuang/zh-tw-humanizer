@@ -68,7 +68,7 @@ Per-case numbers, caveats and the one case the skill loses are in [BENCHMARK.md]
 
 ## Installation
 
-The repo root is itself a valid skill directory (`SKILL.md` at the top), so for every harness the install is: clone into that harness's skills folder.
+The repo root is itself a valid skill directory (`SKILL.md` at the top), so any harness can install it by cloning the repo into its skills folder. Claude Code can also install it from the plugin marketplace, and `npx skills add` covers the rest. Landing page: [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev).
 
 ### One-command (skills.sh CLI)
 

@@ -68,7 +68,7 @@
 
 ## 安裝方式
 
-這個 repo 的根目錄本身就是合格的 skill 目錄（`SKILL.md` 在最上層），所以每個工具的安裝方式都一樣：把 repo clone 到該工具讀取 skill 的資料夾即可。
+這個 repo 的根目錄本身就是合格的 skill 目錄（`SKILL.md` 在最上層），所以任何工具都能把 repo clone 到它讀取 skill 的資料夾來安裝。Claude Code 也可以走外掛市集，`npx skills add` 則涵蓋其他工具。介紹頁：[zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)。
 
 ### 一行安裝（skills.sh CLI）
 
