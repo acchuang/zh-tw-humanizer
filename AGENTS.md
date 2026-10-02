@@ -11,7 +11,7 @@ at `~/.agents/skills/zh-tw-humanizer/SKILL.md`.
 
 - This repo is the published source of truth for the skill.
 - Editing workflow: change `SKILL.md` here, then sync to `~/.agents/skills/zh-tw-humanizer/SKILL.md` (installed location) and bump `metadata.version` in the frontmatter on meaningful changes.
-- README and LICENSE are distribution files; keep them in sync with SKILL.md content.
+- README.md (zh-TW, default), README.en.md (English) and LICENSE are distribution files; keep them in sync with SKILL.md content.
 
 ## Local Contracts
 
