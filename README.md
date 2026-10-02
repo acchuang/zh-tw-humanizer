@@ -4,7 +4,7 @@
 [![version](https://img.shields.io/badge/skill-v1.6.0-blue)](SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-**繁體中文版 README → [README.zh-TW.md](README.zh-TW.md)**
+**繁體中文版 README → [README.zh-TW.md](README.zh-TW.md)** · **Site → [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)**
 
 A portable agent skill that removes signs of AI-generated writing from Traditional Chinese text and localizes it to **Taiwanese Mandarin** — Taiwan vocabulary (影片/軟體/網路/資料, never 視頻/軟件/網絡/數據), Taiwanese tone, particles, and natural sentence rhythm. It never outputs simplified Chinese or mainland-style phrasing.
 

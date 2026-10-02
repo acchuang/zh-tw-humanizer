@@ -1,0 +1,5 @@
+{
+  "name": "zh-tw-humanizer",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./public" }
+}

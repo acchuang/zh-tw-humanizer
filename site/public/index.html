@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>zh-tw-humanizer：把 AI 腔的繁體中文改回台灣人會寫的樣子</title>
+<meta name="description" content="繁體中文（台灣）去 AI 味 agent skill。只動語氣、不動事實，有 30 案例對照實測可查。Claude Code、Codex、Cursor 都能用。">
+<meta property="og:title" content="zh-tw-humanizer">
+<meta property="og:description" content="只動語氣、不動事實的台灣中文去 AI 味 skill，附可驗證的實測數字。">
+<style>
+:root{--bg:#f5f4ed;--card:#faf9f5;--ink:#141413;--body:#5e5d59;--mute:#87867f;--line:#e8e6dc;--accent:#c96442;--dark:#30302e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.7 system-ui,-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:Georgia,"Songti TC","Noto Serif TC",serif;font-weight:500;line-height:1.25;margin:0}
+header.hero{padding:96px 0 56px}
+h1{font-size:clamp(34px,6vw,58px);line-height:1.15}
+.lede{font-size:20px;color:var(--body);max-width:36em;margin:24px 0 32px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;padding:10px 20px;border-radius:10px;text-decoration:none;font-size:16px;box-shadow:0 0 0 1px #d1cfc5}
+.btn.primary{background:var(--accent);color:#fff;box-shadow:none}
+.btn.sec{background:var(--line);color:#4d4c48}
+section{padding:56px 0;border-top:1px solid var(--line)}
+h2{font-size:32px;margin-bottom:16px}
+p{margin:0 0 14px}
+.sub{color:var(--body)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+@media(max-width:700px){.pair{grid-template-columns:1fr}}
+.box{background:var(--card);border-radius:12px;padding:20px 22px;box-shadow:0 0 0 1px var(--line)}
+.box small{display:block;font-size:13px;letter-spacing:.5px;color:var(--mute);margin-bottom:8px}
+.box.after small{color:var(--accent)}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
+@media(max-width:700px){.nums{grid-template-columns:1fr}}
+.num b{display:block;font:500 44px/1.1 Georgia,serif;color:var(--accent)}
+.num span{color:var(--body);font-size:15px}
+ul{padding-left:1.2em;margin:0 0 14px}
+li{margin-bottom:6px}
+pre{background:var(--dark);color:#faf9f5;border-radius:12px;padding:16px 20px;overflow-x:auto;font:15px/1.6 ui-monospace,Menlo,monospace;margin:12px 0}
+code{font:0.92em ui-monospace,Menlo,monospace;background:var(--line);padding:1px 6px;border-radius:5px}
+pre code{background:none;padding:0}
+footer{padding:40px 0 64px;color:var(--mute);font-size:14px;border-top:1px solid var(--line)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <h1>改寫只動語氣，<br>不動事實。</h1>
+  <p class="lede">把 AI 腔的繁體中文改回台灣人會寫的樣子。不編造數字，不漏掉日期，不把整篇重寫成另一個人。每一項都有測試可查。</p>
+  <div class="btns">
+    <a class="btn primary" href="#install">安裝</a>
+    <a class="btn sec" href="https://github.com/acchuang/zh-tw-humanizer/blob/main/BENCHMARK.md">看實測數字</a>
+    <a class="btn sec" href="https://github.com/acchuang/zh-tw-humanizer">GitHub</a>
+  </div>
+</header>
+
+<section>
+  <h2>改完長這樣</h2>
+  <p class="sub">技術文件用輕手：指令與版本原樣保留。</p>
+  <div class="pair">
+    <div class="box"><small>前</small>在當今快速演進的技術環境中，Docker 作為容器化技術的重要解決方案，扮演著簡化部署流程的關鍵角色。使用者僅需執行相關指令即可輕鬆完成環境的建置。</div>
+    <div class="box after"><small>後</small>Docker 把應用程式和它的相依套件打包成容器，部署時不用再處理環境差異。建置環境只要一行：<code>docker compose up -d</code></div>
+  </div>
+  <div class="pair">
+    <div class="box"><small>前</small>不得不說，這家咖啡廳真的是台北最療癒的空間之一 ✨ 不僅環境舒適、餐點美味，更是一個能讓靈魂沉澱的秘密基地！</div>
+    <div class="box after"><small>後</small>這家咖啡廳在巷子裡，位子不多，下午常常客滿。我點的耶加雪菲酸度偏高，喝起來有柑橘味。</div>
+  </div>
+</section>
+
+<section>
+  <h2>有量測，不只是宣稱</h2>
+  <p class="sub">30 個案例（部落格、技術文件、商務信件、電商、新聞稿、學術、夾帶指令），每案都跑「有 skill」與「沒有 skill」。原稿的數字、日期、網址、引文用 regex 驗證。</p>
+  <div class="nums">
+    <div class="num"><b>0.91</b><span>有 skill 的平均分數<br>（沒有 skill：0.77）</span></div>
+    <div class="num"><b>22 / 30</b><span>案例領先<br>持平 7，落後 1</span></div>
+    <div class="num"><b>157</b><span>組大陸用語 → 台灣用語<br>另有「台灣也用」不誤殺清單</span></div>
+  </div>
+  <p class="sub">限制寫在明面上：每案只跑一次、只測預設模型；skill 落後的那一案（原稿含編造統計時，skill 保留使用者的數字）也列在 <a href="https://github.com/acchuang/zh-tw-humanizer/blob/main/BENCHMARK.md">BENCHMARK.md</a>。</p>
+</section>
+
+<section>
+  <h2>改完怎麼確認沒改壞</h2>
+  <pre><code>python3 scripts/check.py --source 原稿.md 完稿.md</code></pre>
+  <p class="sub">離線執行，不呼叫 API。列出完稿遺失、或原稿沒有的數字、日期、版本、網址、信箱、程式碼與引文，再加上破折號、大陸用語、隱形字元等機械可驗的破綻。</p>
+</section>
+
+<section>
+  <h2>它處理的事</h2>
+  <ul>
+    <li>60 種中文 AI 寫作特徵：假真誠開場、「不是 X 而是 Y」、「賦能」「打造」、連接詞堆疊、翻譯腔、金句堆疊。</li>
+    <li>台灣在地化：用詞、簡繁轉換陷阱、語助詞與語氣，依文體決定改多少。</li>
+    <li>隱形字元清除（零寬字元、tag characters）。</li>
+    <li>夾帶指令不照做：貼進來的「忽略先前指令」照字面改寫，並告訴你它在那裡。</li>
+    <li>價格、專有名詞、網址、引文、法律用語鎖定不動。</li>
+  </ul>
+</section>
+
+<section id="install">
+  <h2>安裝</h2>
+  <p class="sub">Claude Code：</p>
+  <pre><code>/plugin marketplace add acchuang/zh-tw-humanizer
+/plugin install zh-tw-humanizer@zh-tw-humanizer</code></pre>
+  <p class="sub">其他工具（Codex、Cursor、OpenCode…）：</p>
+  <pre><code>npx skills add acchuang/zh-tw-humanizer --global</code></pre>
+  <p class="sub">MIT 授權。</p>
+</section>
+
+<footer>zh-tw-humanizer v1.6.0 · <a href="https://github.com/acchuang/zh-tw-humanizer">GitHub</a> · <a href="https://github.com/acchuang/zh-tw-humanizer/blob/main/README.md">README</a></footer>
+</div>
+</body>
+</html>

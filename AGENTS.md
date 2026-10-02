@@ -48,3 +48,7 @@ claude plugin eval . --runs 1 --no-publish      # skill behaviour, ~$8 per full 
 
 `scripts/check.py` on `SKILL.md` itself is meaningless — the skill quotes every bad pattern
 as an example. Run it on rewritten prose only.
+
+## Landing page
+
+`site/public/index.html` is a single static page, served by Cloudflare Workers assets (`site/wrangler.jsonc`). Deploy: `cd site && wrangler deploy`. Live at https://zh-tw-humanizer.oilygold.workers.dev. Numbers on the page come from `BENCHMARK.md`; update both together.

@@ -4,7 +4,7 @@
 [![version](https://img.shields.io/badge/skill-v1.6.0-blue)](SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-**English README → [README.md](README.md)**
+**English README → [README.md](README.md)** · **Site → [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)**
 
 這是一個可攜式 agent skill，能把繁體中文文字裡的 AI 生成痕跡去掉，並在地化成**台灣國語**——台灣用詞（影片/軟體/網路/資料，絕不用視頻/軟件/網絡/數據）、台式語氣、語助詞、自然的句子節奏。絕不輸出簡體中文或大陸腔調用語。
 
