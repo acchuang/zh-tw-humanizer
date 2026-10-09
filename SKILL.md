@@ -374,6 +374,7 @@ metadata:
 - **「最……之一」**：「李白是中國偉大的詩人之一」→「李白是大詩人」。意思沒變，還少了五個字。
 - **「當……的時候」**：看到 when 就翻「當」。余光中稱之為「當當之聲，不絕於耳」。多數情況直接刪掉「當」和「的時候」。
 - **「對 X 進行 Y」**：「對問題進行分析」→「分析問題」；「對資料進行整理」→「整理資料」。
+- **層疊的「的」**：「十億參數的開源小模型的微調的完整方案」，一串「的」疊三層，讀者得自己拆。改法是換結構、保留修飾關係：「適用於十億參數開源小模型的完整微調方案」。不要照字數機械刪「的」；兩層以內、讀得順的定語是正常中文。
 
 另外：中文列舉不用像英文那樣在最後一項前面塞「和／以及」，不會說「一年有春、夏、秋和冬」。
 
@@ -1045,6 +1046,16 @@ metadata:
 
 **判斷原則：看群集，不看單點**。一個破折號沒什麼；破折號＋三連排比＋「值得一提的是」＋「總而言之」收尾，就是自白。不確定就保留原文。
 
+### 方法守則
+
+- **訊號不是證據**。這些模式只說明「這句寫得空」，不證明誰寫的。人在趕稿、寫第二語言、套公文格式時，一樣會寫出同樣的形狀；公開研究也指出 AI 偵測器對非母語寫作者誤判率偏高（Liang 等人，*Patterns* 2023，轉引自 conorbronsdon/avoid-ai-writing）。被問到「這篇是不是 AI 寫的」，只能回答哪些地方有這些訊號，不下判決。升學、聘僱、發表、歸屬這類後果大的決定，不要只靠它。
+- **沒有問題就原樣交回**。掃完沒有任何適用的模式，就把原文原封不動交出去，並說明「沒有需要改的地方」。不要為了證明有做事，合併句子、換詞、順稿。
+- **掃描優先序**。時間有限只看前兩級：
+  1. 必修（可信度殺手）：聊天機器人痕跡與奉承（47、49）、知識截止聲明（48）、佔位文字與工具痕跡（53、54）、虛指權威與幻覺引用（10、11、12）、無端拔高（1、2）。
+  2. 該修（明顯 AI 味）：公式化開場與收尾（14、51、52）、對仗與金句（6、7、22）、翻譯腔與連接詞堆疊（17、18）、中國大陸用語（34）、同類模式成群出現。
+  3. 有空再修：破折號（27）、粗體與排版（41–46）、單點的修飾詞。
+- **改寫不等於去浮水印**。零寬字元、tag characters 這類看不見的標記可以清掉（見模式 54），但自然改寫不會移除統計式的文字浮水印，也不能當成「已經去掉」的保證。使用者要的是清除浮水印或溯源痕跡時，直接說明這個限制，不要承諾做得到。
+
 ### 文風斷層（半 AI 稿的訊號）
 
 一篇文章不一定整篇都是 AI 寫的。常見的是人寫了開頭和結尾，中間幾段叫 AI 補；或人寫完初稿，叫 AI「潤飾」某幾段。訊號是**同一篇裡風格突然變了**：前三段句子長短參差、有具體地名和自嘲，第四段開始每句都一樣長、形容詞變多、出現「值得一提的是」，然後最後一段又變回來。
@@ -1073,6 +1084,8 @@ metadata:
 - RAR 設計攻略：[去 AI 味怎麼做才有效](https://rar.design/posts/de-ai-flavor-writing-skill-guide)（「規則腔」的來源：規則套過頭會生出新的破綻）
 - 36氪／有三思 U Sense：[消除「罪證」：給寫作去除「AI 味」的不完全手冊（2026 版）](https://36kr.com/p/3824601267196037)（虛假範圍「從 X 到 Y」、「最」字堆疊、誤判案例）
 - Wikipedia：[Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) 2026 年版新增「Ineffective indicators」與「Historical indicators」兩節，同義詞輪換等舊破綻的可信度被下修
+- conorbronsdon/avoid-ai-writing（v3.37.0）：嚴重度分級、「訊號不是證據」、無問題就原樣交回、改寫前後逐段對帳的做法
+- op7418/Humanizer-zh（2026-09-23 修訂）與 kevintsai1202/Humanizer-zh-TW：31 檢查點、「模式是線索不是黑名單」、層疊的「的」
 - 同類開源 skill 參考：[blader/humanizer](https://github.com/blader/humanizer)、[Raymondhou0917/speak-human-tw](https://github.com/Raymondhou0917/speak-human-tw)、[tentenco/shuorenhua-zh-tw](https://github.com/tentenco/shuorenhua-zh-tw)、[kevintsai1202/Humanizer-zh-TW](https://github.com/kevintsai1202/Humanizer-zh-TW)、[nagameTW/humanizer-zh-tw](https://github.com/nagameTW/humanizer-zh-tw)、[yelban/humanizer.TW](https://github.com/yelban/humanizer.tw)、[op7418/Humanizer-zh](https://github.com/op7418/humanizer-zh)
 
 核心洞見：「LLM 用統計猜下一個字，所以結果趨向『最統計可能、適用最多情況』的寫法——也就是最沒有個性的寫法。台灣人的文字有氣味、有態度、有方言和英語的痕跡，這些正是 AI 學不會的部分。」
