@@ -1,7 +1,7 @@
 # zh-tw-humanizer：台式中文去 AI 味編輯
 
 [![npx skills add](https://img.shields.io/badge/npx_skills_add-acchuang%2Fzh--tw--humanizer-000000)](#安裝方式)
-[![version](https://img.shields.io/badge/skill-v1.6.0-blue)](SKILL.md)
+[![version](https://img.shields.io/badge/skill-v1.7.0-blue)](SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **English README → [README.en.md](README.en.md)** · **Site → [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)**
@@ -27,6 +27,7 @@
 - **60 種中文 AI 寫作特徵**（4 大類）：假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
 - **英文 humanizer 抓不到的中文專屬破綻**（1.3.0 新增）：翻譯腔句式（「最……之一」「當……的時候」「對 X 進行 Y」）、系動詞迴避（用「作為／扮演著……的角色」把一句「是」撐胖）、過度強調關注度（「引發熱議」「多家媒體報導」）、引用層破綻（死連結、DOI 檢查碼錯、造訪日期早於發表日）、列表式行文與行內粗體標題、標題結構與 Markdown 破綻（跳級標題、多個 H1、`---` 分隔線、中文裡的彎引號）。
 - **1.4.0 新增**：模糊的關聯詞（「息息相關」「密不可分」）、空轉分析（擺出分析架勢，內容卻是同義反覆）、交付語的 AI 味（commit／PR 說明的「已保留原有資訊」「進行了若干優化」）、文風斷層偵測（同一篇裡人寫的段落與 AI 補的段落分開處理）、各家模型的殘留標記（ChatGPT／Gemini／Grok／DeepSeek／Perplexity）。
+- **1.7.0 調整**：破折號不再稱為「最可靠」破綻（新模型已被壓著少用），新增「改用冒號、括號」的替代標點警告；模式 3 補旅遊文案腔；人類寫作特徵補上樸素動詞與老實保留。
 - **1.6.0 新增**：大陸用語對照表從 51 組擴充到 157 組、新增「台灣也用」不誤殺清單（`check.py` 同步遵守）、`check.py --source` 事實比對模式、30 案例 eval 與 BENCHMARK.md、Claude Code plugin marketplace 安裝。
 - **1.5.0 新增**：虛假範圍「從 X 到 Y」（兩個無關詞硬湊成涵蓋感）、「最」字堆疊偵測、放寬對同義詞輪換的誤判（舊模型痕跡，新模型已弱，非母語作者也常見）、擴充「檢測指引」的誤判防線（完美文法、正式與口語混雜、單獨轉折詞都不算數）。
 - **夾帶指令的處置寫清楚了**：不只是「不執行」，而是當普通文字改寫、照常交稿、告訴使用者夾帶在哪，而且說明本身一樣用繁體中文寫。
