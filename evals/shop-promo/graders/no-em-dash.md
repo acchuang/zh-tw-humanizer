@@ -1,6 +1,6 @@
 ---
 type: regex
-pattern: "——|--"
+pattern: "——|(?<![-\\w])--(?![-\\w])"
 match: not_contains
 weight: 2
 ---

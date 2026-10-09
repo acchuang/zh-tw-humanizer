@@ -5,6 +5,7 @@
     python3 scripts/check.py 最終稿.md
     cat 最終稿.md | python3 scripts/check.py
     python3 scripts/check.py --source 原稿.md 最終稿.md   # 另外比對事實有沒有掉、有沒有憑空多
+    python3 scripts/check.py --patterns 稿.md            # 另外列出 SKILL.md 各模式「注意詞」的命中（只提示，不影響結果）
     python3 scripts/check.py --self-test
 
 只檢查「查得準」的規則：破折號、大陸用語、隱形字元、彎引號、工具痕跡、
@@ -84,6 +85,37 @@ def load_exempt(skill_path=SKILL):
     m = re.search(r"^\*\*台灣也用（不要改）\*\*：(.+)$",
                   skill_path.read_text(encoding="utf-8"), re.M)
     return [w.strip() for w in m.group(1).split("、") if w.strip()] if m else []
+
+
+def load_watchwords(skill_path=SKILL):
+    """從 SKILL.md 各模式的「**注意詞**」行讀詞。回傳 [(模式編號, 詞)]。
+    兩字以下的詞（作為、豐富）太常見，會把提示淹掉，不收。「……」是句型，不是詞。"""
+    if not skill_path.exists():
+        return []
+    body = skill_path.read_text(encoding="utf-8")
+    out = []
+    for num, block in re.findall(r"^### (\d+)\.(.*?)(?=^### |\Z)", body, re.S | re.M):
+        m = re.search(r"^\*\*注意詞\*\*：(.+)$", block, re.M)
+        if not m:
+            continue
+        for w in re.split(r"[、，,；;]", m.group(1).rstrip("。")):
+            w = w.strip()
+            if len(w) >= 3 and "……" not in w:
+                out.append((int(num), w))
+    return out
+
+
+def scan_patterns(text, words=None):
+    """注意詞命中，回傳 [(行, 欄, 模式編號, 詞)]。命中不代表有問題，只是該看一眼。"""
+    words = load_watchwords() if words is None else words
+    prose = strip_protected(text)
+    hits = []
+    for num, w in words:
+        for m in re.finditer(re.escape(w), prose):
+            line = prose.count("\n", 0, m.start()) + 1
+            col = m.start() - (prose.rfind("\n", 0, m.start()) + 1) + 1
+            hits.append((line, col, num, w))
+    return sorted(hits)
 
 
 def strip_protected(text):
@@ -241,6 +273,11 @@ def self_test():
     assert any(r == "新增事實" and "73.6" in n for r, n in compare(src, ok + "有 73.6% 的人同意。"))
     # 條列編號不算新增數字
     assert compare("甲乙", "1. 甲\n2. 乙") == []
+    # 注意詞提示
+    words = [(10, "專家指出"), (15, "未來可期")]
+    assert [h[2:] for h in scan_patterns("專家指出，公司未來可期。", words)] == [(10, "專家指出"), (15, "未來可期")]
+    assert scan_patterns("`專家指出`", words) == []
+    assert len(load_watchwords()) >= 100, "讀不到注意詞，SKILL.md 格式可能變了"
     # 真的讀得到 SKILL.md 的表
     real = load_vocab()
     assert len(real) >= 150, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
@@ -270,6 +307,7 @@ def main(argv):
             return 1
         print("機械檢查與事實比對通過（語氣、節奏、人味請自己看）。", file=sys.stderr)
         return 0
+    hint = "--patterns" in argv
     paths = [a for a in argv if not a.startswith("-")]
     total = []
     if paths:
@@ -277,6 +315,10 @@ def main(argv):
             total += report(p, Path(p).read_text(encoding="utf-8"))
     else:
         total += report("<stdin>", sys.stdin.read())
+    if hint:
+        for p in paths:
+            for line, col, num, w in scan_patterns(Path(p).read_text(encoding="utf-8")):
+                print(f"{p}:{line}:{col}  提示  模式 {num}：{w}")
     if total:
         print(f"\n{len(total)} 個機械破綻。改完再交稿。", file=sys.stderr)
         return 1

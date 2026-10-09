@@ -32,6 +32,7 @@ at `~/.agents/skills/zh-tw-humanizer/SKILL.md`.
 ```bash
 python3 scripts/check.py --self-test            # checker's own tests
 python3 scripts/check.py <draft.md>             # exit 1 if mechanical breaks remain
+python3 scripts/check.py --patterns <draft.md>   # advisory: lists hits on each pattern's 注意詞 (read from SKILL.md), never changes exit code
 python3 scripts/check.py --source <orig.md> <draft.md>  # also diff facts (lost / invented numbers, dates, URLs, quotes)
 python3 scripts/verify_semantic.py --self-test  # semantic verifier self-test
 python3 scripts/verify_semantic.py <orig.md> <draft.md> # TypeSafe AI semantic verification
