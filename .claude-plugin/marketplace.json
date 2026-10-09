@@ -7,7 +7,7 @@
       "name": "zh-tw-humanizer",
       "source": "./",
       "description": "把 AI 寫的繁體中文改寫成自然、有人味的台灣風格文字，附可驗證的事實保留檢查。",
-      "version": "1.7.0",
+      "version": "1.8.0",
       "category": "writing"
     }
   ]
