@@ -21,7 +21,7 @@ The pitch is that a rewrite changes the voice and nothing else: no invented fact
 - **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite. Offline, no API calls.
 - **Pattern hints**: `python3 scripts/check.py --patterns draft.md` lists hits on each pattern's watch-words with the pattern number. Advisory only (never fails); the word list is read from `SKILL.md`.
 
-Per-case numbers, caveats and the one case the skill loses are in [BENCHMARK.md](BENCHMARK.md). Single run per case, default model only.
+Per-case numbers, caveats and and the unresolved `soup-blog-heavy` tie are in [BENCHMARK.md](BENCHMARK.md). Two runs per arm per case, default model only.
 
 ## What it covers
 

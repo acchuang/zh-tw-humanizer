@@ -21,7 +21,7 @@
 - **事實比對**：`python3 scripts/check.py --source 原稿.md 完稿.md` 列出改寫後遺失或新增的事實，離線執行，不呼叫 API。
 - **模式提示**：`python3 scripts/check.py --patterns 完稿.md` 列出各模式「注意詞」的命中與模式編號，只提示、不影響結果；詞表直接讀自 `SKILL.md`。
 
-逐案數字、限制，以及 skill 落後的那一案，都寫在 [BENCHMARK.md](BENCHMARK.md)。每案只跑一次，只測預設模型。
+逐案數字、限制，以及仍未解決的 `soup-blog-heavy`（兩邊同分），都寫在 [BENCHMARK.md](BENCHMARK.md)。每案每組跑兩次，只測預設模型。
 
 ## 涵蓋內容
 

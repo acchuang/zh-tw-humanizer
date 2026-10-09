@@ -36,7 +36,7 @@ python3 scripts/check.py --patterns <draft.md>   # advisory: lists hits on each 
 python3 scripts/check.py --source <orig.md> <draft.md>  # also diff facts (lost / invented numbers, dates, URLs, quotes)
 python3 scripts/verify_semantic.py --self-test  # semantic verifier self-test
 python3 scripts/verify_semantic.py <orig.md> <draft.md> # TypeSafe AI semantic verification
-claude plugin eval . --runs 1 --no-publish      # skill behaviour, ~$9 per full 30-case pass at --runs 1 (~$18 at --runs 2)
+claude plugin eval . --runs 1 --no-publish      # skill behaviour, ~$18 per full 30-case pass at --runs 2 (earlier --runs 1 passes cost ~$8)
 ```
 
 兩個已知不穩定的案例，不要當成迴歸就急著調 grader：
