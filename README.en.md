@@ -47,7 +47,7 @@ Per-case numbers, caveats and and the unresolved `soup-blog-heavy` tie are in [B
 - **Protected spans**: prices, proper nouns, links, quotes, and legal terms are locked and never touched during rewriting.
 - **Scene-based intensity**: different genres get different treatment (social posts rewritten heavily, technical docs kept conservative).
 - **Annotation mode**: "先標問題不要改" lists problems without rewriting — for reviewing others' drafts.
-- **Pre-delivery quality self-check**: a 5-dimension 50-point score (information, no-fabrication, Taiwan-correct, rhythm, personality); below 35 it isn't delivered.
+- **Pre-delivery quality self-check**: a 7-item yes/no checklist run before handing over (dashes, mainland vocabulary, simplified-to-traditional errors, invisible characters and quotes, AI-tool residue, protected spans unchanged, no source claim dropped); any failure is fixed before delivery.
 
 ## Before / after
 
