@@ -20,7 +20,7 @@ The pitch is that a rewrite changes the voice and nothing else: no invented fact
 - **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.96 vs 0.78**, the skill ahead in 25 of 31 cases, tied in 6, behind in 0.
 - **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite. Offline, no API calls.
 - **Pattern hints**: `python3 scripts/check.py --patterns draft.md` lists hits on each pattern's watch-words with the pattern number. Advisory only (never fails); the word list is read from `SKILL.md`.
-- **Vocabulary scan scope**: glossary rows tagged with a context (程序, 代碼, 通過, 水平, 運行, 調用, 項目, 支持) can't be told apart mechanically, so `check.py` skips them and you judge those by hand. Overlapping terms report once, leftmost and longest (視頻通話 no longer also reports 視頻).
+- **Vocabulary scan scope**: glossary rows tagged with a context (程序, 代碼, 通過, 水平, 運行, 調用, 項目, 支持) can't be told apart mechanically, so `check.py` skips them (listing any it skipped on stderr) and you judge those by hand. Overlapping terms report once, leftmost and longest (視頻通話 no longer also reports 視頻).
 
 Per-case numbers, caveats and the unresolved `soup-blog-heavy` tie are in [BENCHMARK.md](BENCHMARK.md). Two runs per arm per case, default model only.
 
