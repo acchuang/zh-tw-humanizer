@@ -71,9 +71,10 @@ def load_vocab(skill_path=SKILL):
                                   section.group(1), re.M):
         if left in ("大陸用語", "---", ":---") or set(left) <= {"-", ":"}:
             continue
-        # 表格裡「程序（軟體語境）」這種註記不是要比對的字串
-        term = re.sub(r"（.*?）", "", left).strip()
-        for variant in [t for t in re.split(r"[／/]", term) if t]:
+        # 「程序（軟體語境）」這種標了語境的詞，機器分不出語境，交給人和 SKILL.md 判斷
+        if "（" in left:
+            continue
+        for variant in [t for t in re.split(r"[／/]", left) if t]:
             pairs.append((variant, right))
     return pairs
 
@@ -160,11 +161,15 @@ def scan(text, vocab=None):
 
     exempt = [m.span() for w in load_exempt()
               for m in re.finditer(re.escape(w), prose)]
-    for term, fix in vocab:
-        for m in re.finditer(re.escape(term), prose):
-            if any(a <= m.start() and m.end() <= b for a, b in exempt):
-                continue
-            add(m.start(), "大陸用語", f"模式 34：{term} → {fix}")
+    found = [(m.start(), m.end(), term, fix)
+             for term, fix in vocab for m in re.finditer(re.escape(term), prose)]
+    for s, e, term, fix in found:
+        if any(a <= s and e <= b for a, b in exempt):
+            continue
+        # 視頻通話 已整詞命中，裡面的 視頻 不再單獨報
+        if any(s2 <= s and e <= e2 and e2 - s2 > e - s for s2, e2, _, _ in found):
+            continue
+        add(s, "大陸用語", f"模式 34：{term} → {fix}")
 
     for pattern, note in TOOL_TRACES:
         for m in re.finditer(pattern, text):
@@ -280,9 +285,13 @@ def self_test():
     assert len(load_watchwords()) >= 100, "讀不到注意詞，SKILL.md 格式可能變了"
     # 真的讀得到 SKILL.md 的表
     real = load_vocab()
-    assert len(real) >= 150, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
+    assert len(real) >= 140, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
     assert ("視頻", "影片") in real
     assert not scan("用戶端與大數據", real) and scan("通過考試的用戶", real)
+    # 標了語境的列不掃；長詞優先
+    assert ("程序", "程式") not in real and not scan("程序正義與股票代碼", real)
+    assert [h[3] for h in scan("視頻通話", real)] == ["模式 34：視頻通話 → 視訊通話"]
+    assert scan("戶籍登錄與登錄帳號", real) and len(scan("戶籍登錄與登錄帳號", real)) == 1
     print(f"self-test ok（大陸用語表 {len(real)} 組）")
 
 
