@@ -36,7 +36,7 @@ python3 scripts/check.py --patterns <draft.md>   # advisory: lists hits on each 
 python3 scripts/check.py --source <orig.md> <draft.md>  # also diff facts (lost / invented numbers, dates, URLs, quotes)
 python3 scripts/verify_semantic.py --self-test  # semantic verifier self-test
 python3 scripts/verify_semantic.py <orig.md> <draft.md> # TypeSafe AI semantic verification
-claude plugin eval . --runs 1 --no-publish      # skill behaviour, ~$18 per full 31-case pass at --runs 2 (earlier --runs 1 passes cost ~$8)
+claude plugin eval . --runs 2 --no-publish --trust-plugin -j 6  # skill behaviour, ~$18 per full pass (--runs 1 is ~$8, noisier)
 ```
 
 `type: regex` 的 grader 由 `claude plugin eval` 以 JavaScript `new RegExp(pattern, flags)` 執行（預設無 `u` 旗標；支援 lookahead／lookbehind，`[\s\S]` 可跨行）。不是 Python `re`，別用 Python 的語法假設去寫。

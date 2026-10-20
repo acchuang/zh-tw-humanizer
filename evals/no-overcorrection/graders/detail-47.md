@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "47"
+pattern: "(?<!\\d)47(?!\\d)"
 weight: 1
 ---

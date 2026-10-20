@@ -1,6 +1,6 @@
 # Benchmark
 
-30 cases (a 31st, `vocab-seeded`, was added after this run and is unscored; it seeds ten mainland terms the other cases never contain), run with `claude plugin eval . --runs 2 --no-publish --trust-plugin -j 6`. Each case runs twice: with the skill, and with a no-plugin baseline. Δ = with − without.
+30 cases (a 31st, `vocab-seeded`, was added after this run and is unscored; it seeds ten mainland terms the other cases never contain). After this run, the order-dependent fact regexes in `no-overcorrection`, `protected-spans` and `tech-doc-light` were split into one grader per fact, and the `no-mainland-vocab` regexes were aligned to the pattern 34 table, so per-case scores from a new run are not directly comparable to the table below. Run with `claude plugin eval . --runs 2 --no-publish --trust-plugin -j 6`. Each case runs twice: with the skill, and with a no-plugin baseline. Δ = with − without.
 
 - Date: 2026-10-09, skill v1.8.0. Default model, 2 runs per arm. Cost $17.97, 321 s.
 - Two runs per arm per case. Scores swing between runs (`tech-doc-light` went 0.82 → 1.00 for the skill and 0.82 → 0.45 for the baseline across two passes with no change to it). Read per-case rows as indicative, and the aggregate as the signal.
