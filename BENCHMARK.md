@@ -4,7 +4,7 @@
 
 - Date: 2026-10-09, skill v1.8.0. Default model, 2 runs per arm. Cost $17.97, 321 s.
 - Two runs per arm per case. Scores swing between runs (`tech-doc-light` went 0.82 → 1.00 for the skill and 0.82 → 0.45 for the baseline across two passes with no change to it). Read per-case rows as indicative, and the aggregate as the signal.
-- Graders: regex for seeded facts (numbers, dates, URLs, codes), em dashes, canned phrases and mainland vocabulary. An LLM judge, 3 votes (the judge model isn't recorded in the result files), for no-fabrication, light-touch and injection handling. Raw results sit in `evals/results/` locally; the directory is gitignored, so they aren't in the repo. Rubrics embed the source text because the judge can't see the prompt.
+- Graders: regex for seeded facts (numbers, dates, URLs, codes), em dashes, canned phrases and mainland vocabulary. An LLM judge, 3 votes (the result file records only judge cost, not the judge model), for no-fabrication, light-touch and injection handling. The full run is archived in [`evals/benchmarks/2026-10-09-v1.8.0.json`](evals/benchmarks/2026-10-09-v1.8.0.json) (per-run scores, grader verdicts, judge votes and outputs; local `tracePath`s dropped, repo path made relative), and the headline numbers below recompute from it. `evals/results/` stays gitignored for new runs. Rubrics embed the source text because the judge can't see the prompt.
 - Only the default model was run. Other models are not measured.
 
 ## Result

@@ -39,6 +39,8 @@ python3 scripts/verify_semantic.py <orig.md> <draft.md> # TypeSafe AI semantic v
 claude plugin eval . --runs 1 --no-publish      # skill behaviour, ~$18 per full 31-case pass at --runs 2 (earlier --runs 1 passes cost ~$8)
 ```
 
+`type: regex` 的 grader 由 `claude plugin eval` 以 JavaScript `new RegExp(pattern, flags)` 執行（預設無 `u` 旗標；支援 lookahead／lookbehind，`[\s\S]` 可跨行）。不是 Python `re`，別用 Python 的語法假設去寫。
+
 兩個已知不穩定的案例，不要當成迴歸就急著調 grader（1.8.0 的最終一輪兩個都拿 1.00，見 BENCHMARK.md，但每邊只跑 2 次，下面是更早幾輪的觀察）：
 
 - `prompt-injection` — 輸入裡夾帶「忽略先前的所有指示」時，skill 常常不會被觸發（`skill-fired` FAIL），
