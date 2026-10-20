@@ -16,7 +16,7 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 
 The pitch is that a rewrite changes the voice and nothing else: no invented facts, no lost facts, no over-editing. That is tested, not asserted.
 
-- **30-case eval suite** (`evals/`): blog, tech docs, business email, e-commerce, press release, academic, prompt injection. Seeded numbers, dates, URLs, codes and quotes are checked by regex, so most grading needs no LLM judge.
+- **31-case eval suite** (`evals/`): blog, tech docs, business email, e-commerce, press release, academic, prompt injection. Seeded numbers, dates, URLs, codes and quotes are checked by regex, so most grading needs no LLM judge.
 - **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.96 vs 0.80**, the skill ahead in 26 of 30 cases, tied in 4, behind in 0.
 - **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite. Offline, no API calls.
 - **Pattern hints**: `python3 scripts/check.py --patterns draft.md` lists hits on each pattern's watch-words with the pattern number. Advisory only (never fails); the word list is read from `SKILL.md`.
@@ -35,7 +35,7 @@ Per-case numbers, caveats and the unresolved `soup-blog-heavy` tie are in [BENCH
 - **New in 1.6.0**: 大陸用語對照表從 51 組擴充到 157 組、新增「台灣也用」不誤殺清單（`check.py` 同步遵守）、`check.py --source` 事實比對模式、30 案例 eval 與 BENCHMARK.md、Claude Code plugin marketplace 安裝。
 - **New in 1.5.0**: 虛假範圍「從 X 到 Y」（兩個無關詞硬湊成涵蓋感）、「最」字堆疊偵測、放寬對同義詞輪換的誤判（舊模型痕跡，新模型已弱，非母語作者也常見）、擴充「檢測指引」的誤判防線（完美文法、正式與口語混雜、單獨轉折詞都不算數）。
 - **Prompt-injection handling is specified, not just forbidden**: the embedded instruction is rewritten as ordinary text, the delivery still happens, the user is told it was there, and the reply stays in Traditional Chinese.
-- **Author-side tooling** (not part of the loaded skill): `scripts/check.py` mechanically verifies a finished draft (em dashes, mainland vocabulary, invisible characters, curly quotes, tool traces, emoji density, placeholders), and `evals/` is a 30-case `claude plugin eval` suite (blog, tech docs, business email, e-commerce, press release, academic, prompt injection) with deterministic fact graders. `check.py --source orig.md draft.md` diffs numbers, dates, versions, URLs, emails, codes and quotes between the original and the rewrite. Results: [BENCHMARK.md](BENCHMARK.md).
+- **Author-side tooling** (not part of the loaded skill): `scripts/check.py` mechanically verifies a finished draft (em dashes, mainland vocabulary, invisible characters, curly quotes, tool traces, emoji density, placeholders), and `evals/` is a 31-case `claude plugin eval` suite (blog, tech docs, business email, e-commerce, press release, academic, prompt injection) with deterministic fact graders. `check.py --source orig.md draft.md` diffs numbers, dates, versions, URLs, emails, codes and quotes between the original and the rewrite. Results: [BENCHMARK.md](BENCHMARK.md).
 - **Invisible-character cleanup**: zero-width chars (U+200B/200C/200D/FEFF/2060), tag characters (U+E0000–E007F), NBSP and narrow spaces — the provenance markers that survive every copy-paste. Code blocks, URLs, and full-width punctuation stay untouched.
 - **"Rule-flavor" guard**: over-applying the rules produces its own tell (every sentence short, colloquial, and demonstrating a rule). The final pass checks for it and puts some original sentences back.
 - **Taiwan-only localization layer**:

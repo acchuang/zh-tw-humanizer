@@ -1,10 +1,10 @@
 # Benchmark
 
-30 cases, run with `claude plugin eval . --runs 2 --no-publish --trust-plugin -j 6`. Each case runs twice: with the skill, and with a no-plugin baseline. Δ = with − without.
+30 cases (a 31st, `vocab-seeded`, was added after this run and is unscored; it seeds ten mainland terms the other cases never contain), run with `claude plugin eval . --runs 2 --no-publish --trust-plugin -j 6`. Each case runs twice: with the skill, and with a no-plugin baseline. Δ = with − without.
 
 - Date: 2026-10-09, skill v1.8.0. Default model, 2 runs per arm. Cost $17.97, 321 s.
 - Two runs per arm per case. Scores swing between runs (`tech-doc-light` went 0.82 → 1.00 for the skill and 0.82 → 0.45 for the baseline across two passes with no change to it). Read per-case rows as indicative, and the aggregate as the signal.
-- Graders: regex for seeded facts (numbers, dates, URLs, codes), em dashes, canned phrases and mainland vocabulary. A haiku judge, 3 votes, for no-fabrication, light-touch and injection handling. Rubrics embed the source text because the judge can't see the prompt.
+- Graders: regex for seeded facts (numbers, dates, URLs, codes), em dashes, canned phrases and mainland vocabulary. An LLM judge, 3 votes (the judge model isn't recorded in the result files), for no-fabrication, light-touch and injection handling. Raw results sit in `evals/results/` locally; the directory is gitignored, so they aren't in the repo. Rubrics embed the source text because the judge can't see the prompt.
 - Only the default model was run. Other models are not measured.
 
 ## Result
