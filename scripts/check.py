@@ -285,7 +285,7 @@ def self_test():
     assert len(load_watchwords()) >= 100, "讀不到注意詞，SKILL.md 格式可能變了"
     # 真的讀得到 SKILL.md 的表
     real = load_vocab()
-    assert len(real) >= 140, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
+    assert len(real) >= 145, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
     assert ("視頻", "影片") in real
     assert not scan("用戶端與大數據", real) and scan("通過考試的用戶", real)
     # 標了語境的列不掃；長詞優先
