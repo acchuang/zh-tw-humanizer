@@ -17,7 +17,7 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 The pitch is that a rewrite changes the voice and nothing else: no invented facts, no lost facts, no over-editing. That is tested, not asserted.
 
 - **31-case eval suite** (`evals/`): blog, tech docs, business email, e-commerce, press release, academic, prompt injection. Seeded numbers, dates, URLs, codes and quotes are checked by regex, so most grading needs no LLM judge.
-- **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.96 vs 0.80**, the skill ahead in 26 of 30 cases, tied in 4, behind in 0.
+- **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.96 vs 0.78**, the skill ahead in 25 of 31 cases, tied in 6, behind in 0.
 - **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite. Offline, no API calls.
 - **Pattern hints**: `python3 scripts/check.py --patterns draft.md` lists hits on each pattern's watch-words with the pattern number. Advisory only (never fails); the word list is read from `SKILL.md`.
 - **Vocabulary scan scope**: glossary rows tagged with a context (程序, 代碼, 通過, 水平, 運行, 調用, 項目, 支持) can't be told apart mechanically, so `check.py` skips them and you judge those by hand. Overlapping terms report once, leftmost and longest (視頻通話 no longer also reports 視頻).
