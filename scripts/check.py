@@ -58,24 +58,34 @@ EMOJI = re.compile(
 CJK = r"㐀-鿿豈-﫿"
 
 
-def load_vocab(skill_path=SKILL):
-    """從 SKILL.md 模式 34 的表格讀大陸用語對照。找不到就回空表。"""
+def _vocab_rows(skill_path):
+    """模式 34 表格的 [(左欄, 右欄)]，不含表頭與分隔列。"""
     if not skill_path.exists():
         return []
     body = skill_path.read_text(encoding="utf-8")
     section = re.search(r"^### 34\..*?$(.*?)^### 35\.", body, re.S | re.M)
     if not section:
         return []
+    return [(l, r) for l, r in re.findall(r"^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*$",
+                                          section.group(1), re.M)
+            if l not in ("大陸用語", "---", ":---") and not set(l) <= {"-", ":"}]
+
+
+def load_vocab(skill_path=SKILL):
+    """從 SKILL.md 模式 34 的表格讀大陸用語對照。找不到就回空表。"""
     pairs = []
-    for left, right in re.findall(r"^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*$",
-                                  section.group(1), re.M):
-        if left in ("大陸用語", "---", ":---") or set(left) <= {"-", ":"}:
+    for left, right in _vocab_rows(skill_path):
+        # 「程序（軟體語境）」這種標了語境的詞，機器分不出語境，交給人和 SKILL.md 判斷
+        if "（" in left:
             continue
-        # 表格裡「程序（軟體語境）」這種註記不是要比對的字串
-        term = re.sub(r"（.*?）", "", left).strip()
-        for variant in [t for t in re.split(r"[／/]", term) if t]:
+        for variant in [t for t in re.split(r"[／/]", left) if t]:
             pairs.append((variant, right))
     return pairs
+
+
+def load_context_terms(skill_path=SKILL):
+    """被 load_vocab 略過的標語境詞（程序、代碼……），只取詞本身。"""
+    return [re.split(r"[（(]", left)[0] for left, _ in _vocab_rows(skill_path) if "（" in left]
 
 
 def load_exempt(skill_path=SKILL):
@@ -160,11 +170,15 @@ def scan(text, vocab=None):
 
     exempt = [m.span() for w in load_exempt()
               for m in re.finditer(re.escape(w), prose)]
-    for term, fix in vocab:
-        for m in re.finditer(re.escape(term), prose):
-            if any(a <= m.start() and m.end() <= b for a, b in exempt):
-                continue
-            add(m.start(), "大陸用語", f"模式 34：{term} → {fix}")
+    found = [(m.start(), m.end(), term, fix)
+             for term, fix in vocab for m in re.finditer(re.escape(term), prose)]
+    # 重疊的命中只留最左邊、最長的：視頻通話 吃掉裡面的 視頻，本周末 只報 本周
+    reported_to = 0
+    for s, e, term, fix in sorted(found, key=lambda h: (h[0], h[0] - h[1])):
+        if s < reported_to or any(a <= s and e <= b for a, b in exempt):
+            continue
+        reported_to = e
+        add(s, "大陸用語", f"模式 34：{term} → {fix}")
 
     for pattern, note in TOOL_TRACES:
         for m in re.finditer(pattern, text):
@@ -234,6 +248,10 @@ def report(name, text):
     hits = scan(text)
     for line, col, rule, note in hits:
         print(f"{name}:{line}:{col}  {rule}  {note}")
+    prose = strip_protected(text)
+    skipped = sorted({w for w in load_context_terms() if w in prose})
+    if skipped:
+        print(f"{name}  略過標語境的詞，請人工看是不是大陸用法：{'、'.join(skipped)}", file=sys.stderr)
     return hits
 
 
@@ -280,9 +298,15 @@ def self_test():
     assert len(load_watchwords()) >= 100, "讀不到注意詞，SKILL.md 格式可能變了"
     # 真的讀得到 SKILL.md 的表
     real = load_vocab()
-    assert len(real) >= 150, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
+    assert len(real) >= 145, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
     assert ("視頻", "影片") in real
     assert not scan("用戶端與大數據", real) and scan("通過考試的用戶", real)
+    # 標了語境的列不掃；長詞優先
+    assert ("程序", "程式") not in real and not scan("程序正義與股票代碼", real)
+    assert [h[3] for h in scan("視頻通話", real)] == ["模式 34：視頻通話 → 視訊通話"]
+    assert len(scan("本周末去看展", real)) == 1
+    assert not scan("青花菜", real) and scan("花菜", real)
+    assert "代碼" in load_context_terms() and "程序" in load_context_terms()
     print(f"self-test ok（大陸用語表 {len(real)} 組）")
 
 

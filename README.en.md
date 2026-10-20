@@ -1,7 +1,7 @@
 # zh-tw-humanizer
 
 [![npx skills add](https://img.shields.io/badge/npx_skills_add-acchuang%2Fzh--tw--humanizer-000000)](#installation)
-[![version](https://img.shields.io/badge/skill-v1.8.0-blue)](SKILL.md)
+[![version](https://img.shields.io/badge/skill-v1.8.1-blue)](SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **繁體中文版 README → [README.md](README.md)** · **Site → [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)**
@@ -16,24 +16,26 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 
 The pitch is that a rewrite changes the voice and nothing else: no invented facts, no lost facts, no over-editing. That is tested, not asserted.
 
-- **30-case eval suite** (`evals/`): blog, tech docs, business email, e-commerce, press release, academic, prompt injection. Seeded numbers, dates, URLs, codes and quotes are checked by regex, so most grading needs no LLM judge.
-- **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.91 vs 0.77**, the skill ahead in 22 of 30 cases, tied in 7, behind in 1.
+- **31-case eval suite** (`evals/`): blog, tech docs, business email, e-commerce, press release, academic, prompt injection. Seeded numbers, dates, URLs, codes and quotes are checked by regex, so most grading needs no LLM judge.
+- **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.96 vs 0.78**, the skill ahead in 25 of 31 cases, tied in 6, behind in 0.
 - **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite. Offline, no API calls.
 - **Pattern hints**: `python3 scripts/check.py --patterns draft.md` lists hits on each pattern's watch-words with the pattern number. Advisory only (never fails); the word list is read from `SKILL.md`.
+- **Vocabulary scan scope**: glossary rows tagged with a context (程序, 代碼, 通過, 水平, 運行, 調用, 項目, 支持) can't be told apart mechanically, so `check.py` skips them (listing any it skipped on stderr) and you judge those by hand. Overlapping terms report once, leftmost and longest (視頻通話 no longer also reports 視頻).
 
-Per-case numbers, caveats and the one case the skill loses are in [BENCHMARK.md](BENCHMARK.md). Single run per case, default model only.
+Per-case numbers, caveats and the unresolved `soup-blog-heavy` tie are in [BENCHMARK.md](BENCHMARK.md). Two runs per arm per case, default model only.
 
 ## What it covers
 
 - **60 AI writing patterns in Chinese** (4 categories): 假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
 - **Chinese-specific tells English humanizers miss** (new in 1.3.0): 翻譯腔句式（「最……之一」「當……的時候」「對 X 進行 Y」）、系動詞迴避（「作為/扮演著……的角色」撐胖一句「是」）、過度強調關注度（「引發熱議」「多家媒體報導」）、引用層破綻（死連結、DOI 檢查碼錯、access-date 早於發表日）、列表式行文與行內粗體標題、標題結構與 Markdown 破綻（跳級標題、多個 H1、`---` 分隔線、中文裡的彎引號）。
 - **New in 1.4.0**: 模糊的關聯詞（「息息相關」「密不可分」）、空轉分析（分析的架勢，同義反覆的內容）、交付語的 AI 味（commit／PR 說明的「已保留原有資訊」「進行了若干優化」）、文風斷層偵測（同一篇裡人寫的段落與 AI 補的段落分開處理）、各家模型的殘留標記（ChatGPT／Gemini／Grok／DeepSeek／Perplexity）。
+- **1.8.1 fixes**: `check.py` 不再把標了語境的列（程序、水平、運行、調用、項目、支持、代碼）當成處處要改，重疊的詞只報最左邊最長的一個；修正西蘭花、社保、尽的對照，以及五個範例後文多出的事實。
 - **1.8.0 changes**: 新增「方法守則」（訊號不是證據、無問題原樣交回、掃描優先序、改寫不等於去浮水印）、模式 17 補層疊的「的」、`check.py --patterns` 提示模式。
 - **1.7.0 changes**: 破折號不再稱為「最可靠」破綻（新模型已被壓著少用），新增「改用冒號、括號」的替代標點警告；模式 3 補旅遊文案腔；人類寫作特徵補上樸素動詞與老實保留。
 - **New in 1.6.0**: 大陸用語對照表從 51 組擴充到 157 組、新增「台灣也用」不誤殺清單（`check.py` 同步遵守）、`check.py --source` 事實比對模式、30 案例 eval 與 BENCHMARK.md、Claude Code plugin marketplace 安裝。
 - **New in 1.5.0**: 虛假範圍「從 X 到 Y」（兩個無關詞硬湊成涵蓋感）、「最」字堆疊偵測、放寬對同義詞輪換的誤判（舊模型痕跡，新模型已弱，非母語作者也常見）、擴充「檢測指引」的誤判防線（完美文法、正式與口語混雜、單獨轉折詞都不算數）。
 - **Prompt-injection handling is specified, not just forbidden**: the embedded instruction is rewritten as ordinary text, the delivery still happens, the user is told it was there, and the reply stays in Traditional Chinese.
-- **Author-side tooling** (not part of the loaded skill): `scripts/check.py` mechanically verifies a finished draft (em dashes, mainland vocabulary, invisible characters, curly quotes, tool traces, emoji density, placeholders), and `evals/` is a 30-case `claude plugin eval` suite (blog, tech docs, business email, e-commerce, press release, academic, prompt injection) with deterministic fact graders. `check.py --source orig.md draft.md` diffs numbers, dates, versions, URLs, emails, codes and quotes between the original and the rewrite. Results: [BENCHMARK.md](BENCHMARK.md).
+- **Author-side tooling** (not part of the loaded skill): `scripts/check.py` mechanically verifies a finished draft (em dashes, mainland vocabulary, invisible characters, curly quotes, tool traces, emoji density, placeholders), and `evals/` is a 31-case `claude plugin eval` suite (blog, tech docs, business email, e-commerce, press release, academic, prompt injection) with deterministic fact graders. `check.py --source orig.md draft.md` diffs numbers, dates, versions, URLs, emails, codes and quotes between the original and the rewrite. Results: [BENCHMARK.md](BENCHMARK.md).
 - **Invisible-character cleanup**: zero-width chars (U+200B/200C/200D/FEFF/2060), tag characters (U+E0000–E007F), NBSP and narrow spaces — the provenance markers that survive every copy-paste. Code blocks, URLs, and full-width punctuation stay untouched.
 - **"Rule-flavor" guard**: over-applying the rules produces its own tell (every sentence short, colloquial, and demonstrating a rule). The final pass checks for it and puts some original sentences back.
 - **Taiwan-only localization layer**:
@@ -47,7 +49,7 @@ Per-case numbers, caveats and the one case the skill loses are in [BENCHMARK.md]
 - **Protected spans**: prices, proper nouns, links, quotes, and legal terms are locked and never touched during rewriting.
 - **Scene-based intensity**: different genres get different treatment (social posts rewritten heavily, technical docs kept conservative).
 - **Annotation mode**: "先標問題不要改" lists problems without rewriting — for reviewing others' drafts.
-- **Pre-delivery quality self-check**: a 5-dimension 50-point score (information, no-fabrication, Taiwan-correct, rhythm, personality); below 35 it isn't delivered.
+- **Pre-delivery quality self-check**: a 7-item yes/no checklist run before handing over (dashes, mainland vocabulary, simplified-to-traditional errors, invisible characters and quotes, AI-tool residue, protected spans unchanged, no source claim dropped); any failure is fixed before delivery.
 
 ## Before / after
 

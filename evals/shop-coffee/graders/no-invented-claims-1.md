@@ -1,6 +1,6 @@
 ---
 type: regex
-pattern: "獲獎|SCA|杯測|\\d+\\s*分"
+pattern: "獲獎|SCA|杯測|\\d+\\s*分(?!鐘)"
 match: not_contains
 weight: 2
 ---

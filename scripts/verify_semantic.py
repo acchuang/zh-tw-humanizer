@@ -122,7 +122,8 @@ def run_checks(original_text: str, rewritten_text: str, mock_fn=None) -> bool:
         print(f"❌ 事實保真度: 失敗 - 核心意思矛盾或關鍵細節遺漏 (信心度: {fact_conf:.2f})")
         passed = False
     else:
-        print(f"⚠️ 事實保真度: 判定未明 ({fact_choice})")
+        print(f"❌ 事實保真度: 判定未明 ({fact_choice})")
+        passed = False
 
     # 檢查 2: 台灣在地化與無 AI 腔
     if tw_choice == "authentic_tw":
@@ -163,6 +164,14 @@ def self_test():
 
     assert run_checks("原文", "改寫", mock_fn=mock_pass) is True
     assert run_checks("原文", "捏造細節改寫", mock_fn=mock_fabrication) is False
+
+    def mock_unknown(state, questions):
+        return {"model": "jev-latest", "answers": {
+            "fact_fidelity": {"type": "choice", "choice": "???", "confidence": 0.9},
+            "tw_naturalness": {"type": "choice", "choice": "authentic_tw", "confidence": 0.9},
+        }}
+
+    assert run_checks("原文", "改寫", mock_fn=mock_unknown) is False
 
     print("✅ 自我測試全部通過！")
 
