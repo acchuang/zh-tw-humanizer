@@ -58,25 +58,34 @@ EMOJI = re.compile(
 CJK = r"㐀-鿿豈-﫿"
 
 
-def load_vocab(skill_path=SKILL):
-    """從 SKILL.md 模式 34 的表格讀大陸用語對照。找不到就回空表。"""
+def _vocab_rows(skill_path):
+    """模式 34 表格的 [(左欄, 右欄)]，不含表頭與分隔列。"""
     if not skill_path.exists():
         return []
     body = skill_path.read_text(encoding="utf-8")
     section = re.search(r"^### 34\..*?$(.*?)^### 35\.", body, re.S | re.M)
     if not section:
         return []
+    return [(l, r) for l, r in re.findall(r"^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*$",
+                                          section.group(1), re.M)
+            if l not in ("大陸用語", "---", ":---") and not set(l) <= {"-", ":"}]
+
+
+def load_vocab(skill_path=SKILL):
+    """從 SKILL.md 模式 34 的表格讀大陸用語對照。找不到就回空表。"""
     pairs = []
-    for left, right in re.findall(r"^\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|\s*$",
-                                  section.group(1), re.M):
-        if left in ("大陸用語", "---", ":---") or set(left) <= {"-", ":"}:
-            continue
+    for left, right in _vocab_rows(skill_path):
         # 「程序（軟體語境）」這種標了語境的詞，機器分不出語境，交給人和 SKILL.md 判斷
         if "（" in left:
             continue
         for variant in [t for t in re.split(r"[／/]", left) if t]:
             pairs.append((variant, right))
     return pairs
+
+
+def load_context_terms(skill_path=SKILL):
+    """被 load_vocab 略過的標語境詞（程序、代碼……），只取詞本身。"""
+    return [re.split(r"[（(]", left)[0] for left, _ in _vocab_rows(skill_path) if "（" in left]
 
 
 def load_exempt(skill_path=SKILL):
@@ -239,6 +248,10 @@ def report(name, text):
     hits = scan(text)
     for line, col, rule, note in hits:
         print(f"{name}:{line}:{col}  {rule}  {note}")
+    prose = strip_protected(text)
+    skipped = sorted({w for w in load_context_terms() if w in prose})
+    if skipped:
+        print(f"{name}  略過標語境的詞，請人工看是不是大陸用法：{'、'.join(skipped)}", file=sys.stderr)
     return hits
 
 
@@ -292,6 +305,8 @@ def self_test():
     assert ("程序", "程式") not in real and not scan("程序正義與股票代碼", real)
     assert [h[3] for h in scan("視頻通話", real)] == ["模式 34：視頻通話 → 視訊通話"]
     assert len(scan("本周末去看展", real)) == 1
+    assert not scan("青花菜", real) and scan("花菜", real)
+    assert "代碼" in load_context_terms() and "程序" in load_context_terms()
     print(f"self-test ok（大陸用語表 {len(real)} 組）")
 
 

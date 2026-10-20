@@ -165,6 +165,14 @@ def self_test():
     assert run_checks("原文", "改寫", mock_fn=mock_pass) is True
     assert run_checks("原文", "捏造細節改寫", mock_fn=mock_fabrication) is False
 
+    def mock_unknown(state, questions):
+        return {"model": "jev-latest", "answers": {
+            "fact_fidelity": {"type": "choice", "choice": "???", "confidence": 0.9},
+            "tw_naturalness": {"type": "choice", "choice": "authentic_tw", "confidence": 0.9},
+        }}
+
+    assert run_checks("原文", "改寫", mock_fn=mock_unknown) is False
+
     print("✅ 自我測試全部通過！")
 
 
