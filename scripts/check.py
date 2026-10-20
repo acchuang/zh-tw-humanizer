@@ -163,12 +163,12 @@ def scan(text, vocab=None):
               for m in re.finditer(re.escape(w), prose)]
     found = [(m.start(), m.end(), term, fix)
              for term, fix in vocab for m in re.finditer(re.escape(term), prose)]
-    for s, e, term, fix in found:
-        if any(a <= s and e <= b for a, b in exempt):
+    # 重疊的命中只留最左邊、最長的：視頻通話 吃掉裡面的 視頻，本周末 只報 本周
+    reported_to = 0
+    for s, e, term, fix in sorted(found, key=lambda h: (h[0], h[0] - h[1])):
+        if s < reported_to or any(a <= s and e <= b for a, b in exempt):
             continue
-        # 視頻通話 已整詞命中，裡面的 視頻 不再單獨報
-        if any(s2 <= s and e <= e2 and e2 - s2 > e - s for s2, e2, _, _ in found):
-            continue
+        reported_to = e
         add(s, "大陸用語", f"模式 34：{term} → {fix}")
 
     for pattern, note in TOOL_TRACES:
@@ -291,7 +291,7 @@ def self_test():
     # 標了語境的列不掃；長詞優先
     assert ("程序", "程式") not in real and not scan("程序正義與股票代碼", real)
     assert [h[3] for h in scan("視頻通話", real)] == ["模式 34：視頻通話 → 視訊通話"]
-    assert scan("戶籍登錄與登錄帳號", real) and len(scan("戶籍登錄與登錄帳號", real)) == 1
+    assert len(scan("本周末去看展", real)) == 1
     print(f"self-test ok（大陸用語表 {len(real)} 組）")
 
 
