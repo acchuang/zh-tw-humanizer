@@ -27,15 +27,9 @@ Per-case numbers, caveats and the unresolved `soup-blog-heavy` tie are in [BENCH
 ## What it covers
 
 - **60 AI writing patterns in Chinese** (4 categories): 假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
-- **Chinese-specific tells English humanizers miss** (new in 1.3.0): 翻譯腔句式（「最……之一」「當……的時候」「對 X 進行 Y」）、系動詞迴避（「作為/扮演著……的角色」撐胖一句「是」）、過度強調關注度（「引發熱議」「多家媒體報導」）、引用層破綻（死連結、DOI 檢查碼錯、access-date 早於發表日）、列表式行文與行內粗體標題、標題結構與 Markdown 破綻（跳級標題、多個 H1、`---` 分隔線、中文裡的彎引號）。
-- **New in 1.4.0**: 模糊的關聯詞（「息息相關」「密不可分」）、空轉分析（分析的架勢，同義反覆的內容）、交付語的 AI 味（commit／PR 說明的「已保留原有資訊」「進行了若干優化」）、文風斷層偵測（同一篇裡人寫的段落與 AI 補的段落分開處理）、各家模型的殘留標記（ChatGPT／Gemini／Grok／DeepSeek／Perplexity）。
-- **1.8.1 fixes**: `check.py` 不再把標了語境的列（程序、水平、運行、調用、項目、支持、代碼）當成處處要改，重疊的詞只報最左邊最長的一個；修正西蘭花、社保、尽的對照，以及五個範例後文多出的事實。
-- **1.8.0 changes**: 新增「方法守則」（訊號不是證據、無問題原樣交回、掃描優先序、改寫不等於去浮水印）、模式 17 補層疊的「的」、`check.py --patterns` 提示模式。
-- **1.7.0 changes**: 破折號不再稱為「最可靠」破綻（新模型已被壓著少用），新增「改用冒號、括號」的替代標點警告；模式 3 補旅遊文案腔；人類寫作特徵補上樸素動詞與老實保留。
-- **New in 1.6.0**: 大陸用語對照表從 51 組擴充到 157 組、新增「台灣也用」不誤殺清單（`check.py` 同步遵守）、`check.py --source` 事實比對模式、30 案例 eval 與 BENCHMARK.md、Claude Code plugin marketplace 安裝。
-- **New in 1.5.0**: 虛假範圍「從 X 到 Y」（兩個無關詞硬湊成涵蓋感）、「最」字堆疊偵測、放寬對同義詞輪換的誤判（舊模型痕跡，新模型已弱，非母語作者也常見）、擴充「檢測指引」的誤判防線（完美文法、正式與口語混雜、單獨轉折詞都不算數）。
+- **Chinese-specific tells English humanizers miss**: 翻譯腔句式（「最……之一」「當……的時候」「對 X 進行 Y」）、系動詞迴避（「作為/扮演著……的角色」撐胖一句「是」）、過度強調關注度（「引發熱議」「多家媒體報導」）、引用層破綻（死連結、DOI 檢查碼錯、access-date 早於發表日）、列表式行文與行內粗體標題、標題結構與 Markdown 破綻（跳級標題、多個 H1、`---` 分隔線、中文裡的彎引號）。
+- **More Chinese-specific tells**: 模糊的關聯詞（「息息相關」「密不可分」）、空轉分析（分析的架勢，同義反覆的內容）、交付語的 AI 味（commit／PR 說明的「已保留原有資訊」「進行了若干優化」）、文風斷層偵測（同一篇裡人寫的段落與 AI 補的段落分開處理）、各家模型的殘留標記（ChatGPT／Gemini／Grok／DeepSeek／Perplexity）。
 - **Prompt-injection handling is specified, not just forbidden**: the embedded instruction is rewritten as ordinary text, the delivery still happens, the user is told it was there, and the reply stays in Traditional Chinese.
-- **Author-side tooling** (not part of the loaded skill): `scripts/check.py` mechanically verifies a finished draft (em dashes, mainland vocabulary, invisible characters, curly quotes, tool traces, emoji density, placeholders), and `evals/` is a 31-case `claude plugin eval` suite (blog, tech docs, business email, e-commerce, press release, academic, prompt injection) with deterministic fact graders. `check.py --source orig.md draft.md` diffs numbers, dates, versions, URLs, emails, codes and quotes between the original and the rewrite. Results: [BENCHMARK.md](BENCHMARK.md).
 - **Invisible-character cleanup**: zero-width chars (U+200B/200C/200D/FEFF/2060), tag characters (U+E0000–E007F), NBSP and narrow spaces — the provenance markers that survive every copy-paste. Code blocks, URLs, and full-width punctuation stay untouched.
 - **"Rule-flavor" guard**: over-applying the rules produces its own tell (every sentence short, colloquial, and demonstrating a rule). The final pass checks for it and puts some original sentences back.
 - **Taiwan-only localization layer**:
@@ -43,7 +37,6 @@ Per-case numbers, caveats and the unresolved `soup-blog-heavy` tie are in [BENCH
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
   - 台式語氣：委婉商量式、語助詞（喔/耶/啦/餒/蛤）、句式（還蠻/超/有在/這樣子/的話）、中英夾雜（cancel/confirm/case by case），各限於適合的文體
 - **No-fabrication rule**: rewrites never add facts, names, dates, or citations that aren't in the source text.
-- **Safety boundary**: instruction-like text pasted into the input for rewriting ("ignore previous instructions", "you are now...") is treated as literal content to rewrite, never executed as a new command.
 - **False-positive guidance**: 什麼樣的人類文字不該被改（論文、單一破折號、句中「老實說」、港澳馬新中文…）
 - **Voice calibration**: provide a sample of the author's own writing and the rewrite matches it instead of producing generic "clean" output.
 - **Protected spans**: prices, proper nouns, links, quotes, and legal terms are locked and never touched during rewriting.
@@ -73,83 +66,39 @@ Per-case numbers, caveats and the unresolved `soup-blog-heavy` tie are in [BENCH
 
 ## Installation
 
-The repo root is itself a valid skill directory (`SKILL.md` at the top), so any harness can install it by cloning the repo into its skills folder. Claude Code can also install it from the plugin marketplace, and `npx skills add` covers the rest. Landing page: [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev).
+The repo root is itself a valid skill directory (`SKILL.md` at the top), so cloning it into a harness's skills folder is enough. Landing page: [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev).
 
-### One-command (skills.sh CLI)
+**skills.sh CLI** (covers most harnesses):
 
 ```bash
-npx skills add acchuang/zh-tw-humanizer --global           # all configured harnesses
+npx skills add acchuang/zh-tw-humanizer --global                       # all configured harnesses
 npx skills add acchuang/zh-tw-humanizer --global --agent claude-code   # one harness
-npx skills update zh-tw-humanizer --global                 # update
+npx skills update zh-tw-humanizer --global                             # update
 ```
 
-### Claude Code plugin marketplace
+**Claude Code plugin marketplace**:
 
 ```
 /plugin marketplace add acchuang/zh-tw-humanizer
 /plugin install zh-tw-humanizer@zh-tw-humanizer
 ```
 
-### Claude Code
+**Manual clone**: pick a folder from the table and put the repo in it.
 
 ```bash
-# personal skills (all projects)
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.claude/skills/zh-tw-humanizer
-# or project-level: .claude/skills/zh-tw-humanizer/
+git clone https://github.com/acchuang/zh-tw-humanizer.git <folder>/zh-tw-humanizer
 ```
 
-### Pi
+| Harness | Global | Project-level |
+|---|---|---|
+| Claude Code | `~/.claude/skills/` | `.claude/skills/` |
+| Pi | `~/.agents/skills/` or `~/.pi/agent/skills/` | `.pi/skills/` or `.agents/skills/` |
+| OpenAI Codex CLI | `~/.agents/skills/` | `.agents/skills/` |
+| OpenCode | `~/.config/opencode/skills/` (`mkdir -p` first) | `.opencode/skills/` (`.claude/skills/` and `.agents/skills/` also work) |
+| Gemini CLI | `~/.gemini/skills/` (`~/.agents/skills/` also works) | `.gemini/skills/` or `.agents/skills/` |
+| Cursor, Windsurf, … | the harness's skills folder | same; or just copy `SKILL.md` |
 
-```bash
-# global
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.agents/skills/zh-tw-humanizer
-# or ~/.pi/agent/skills/zh-tw-humanizer/
-# project-level: .pi/skills/ or .agents/skills/ (in the project dir)
-```
-
-Restart the session after installing. The skill then loads on-demand and registers as `/skill:zh-tw-humanizer`.
-
-### OpenAI Codex CLI
-
-Codex reads user skills from `~/.agents/skills/` (same location as Pi) and repo skills from `.agents/skills/` — so the Pi install above works for Codex too:
-
-```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.agents/skills/zh-tw-humanizer
-```
-
-Optional: pin or disable it in `~/.codex/config.toml`:
-
-```toml
-[[skills.config]]
-path = "/Users/you/.agents/skills/zh-tw-humanizer/SKILL.md"
-enabled = true
-```
-
-Restart Codex after changing the config.
-
-### OpenCode
-
-```bash
-# global
-mkdir -p ~/.config/opencode/skills
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.config/opencode/skills/zh-tw-humanizer
-# project-level: .opencode/skills/zh-tw-humanizer/ (or .claude/skills/, .agents/skills/)
-```
-
-### Gemini CLI
-
-```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.gemini/skills/zh-tw-humanizer
-# ~/.agents/skills/ also works as an alias
-# project-level: .gemini/skills/ or .agents/skills/
-```
-
-### Other Agent Skills-compatible harnesses (Cursor, Windsurf, …)
-
-```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git /path/to/your/skills/zh-tw-humanizer
-# or just copy SKILL.md into the harness's skills directory
-```
+Restart the session after installing. In Pi the skill registers as `/skill:zh-tw-humanizer`.
 
 ## Usage
 

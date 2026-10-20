@@ -27,15 +27,9 @@
 ## 涵蓋內容
 
 - **60 種中文 AI 寫作特徵**（4 大類）：假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
-- **英文 humanizer 抓不到的中文專屬破綻**（1.3.0 新增）：翻譯腔句式（「最……之一」「當……的時候」「對 X 進行 Y」）、系動詞迴避（用「作為／扮演著……的角色」把一句「是」撐胖）、過度強調關注度（「引發熱議」「多家媒體報導」）、引用層破綻（死連結、DOI 檢查碼錯、造訪日期早於發表日）、列表式行文與行內粗體標題、標題結構與 Markdown 破綻（跳級標題、多個 H1、`---` 分隔線、中文裡的彎引號）。
-- **1.4.0 新增**：模糊的關聯詞（「息息相關」「密不可分」）、空轉分析（擺出分析架勢，內容卻是同義反覆）、交付語的 AI 味（commit／PR 說明的「已保留原有資訊」「進行了若干優化」）、文風斷層偵測（同一篇裡人寫的段落與 AI 補的段落分開處理）、各家模型的殘留標記（ChatGPT／Gemini／Grok／DeepSeek／Perplexity）。
-- **1.8.1 修正**：`check.py` 不再把標了語境的列（程序、水平、運行、調用、項目、支持、代碼）當成處處要改，重疊的詞只報最左邊最長的一個；修正西蘭花、社保、尽的對照，以及五個範例後文多出的事實。
-- **1.8.0 調整**：新增「方法守則」（訊號不是證據、無問題原樣交回、掃描優先序、改寫不等於去浮水印）、模式 17 補層疊的「的」、`check.py --patterns` 提示模式。
-- **1.7.0 調整**：破折號不再稱為「最可靠」破綻（新模型已被壓著少用），新增「改用冒號、括號」的替代標點警告；模式 3 補旅遊文案腔；人類寫作特徵補上樸素動詞與老實保留。
-- **1.6.0 新增**：大陸用語對照表從 51 組擴充到 157 組、新增「台灣也用」不誤殺清單（`check.py` 同步遵守）、`check.py --source` 事實比對模式、30 案例 eval 與 BENCHMARK.md、Claude Code plugin marketplace 安裝。
-- **1.5.0 新增**：虛假範圍「從 X 到 Y」（兩個無關詞硬湊成涵蓋感）、「最」字堆疊偵測、放寬對同義詞輪換的誤判（舊模型痕跡，新模型已弱，非母語作者也常見）、擴充「檢測指引」的誤判防線（完美文法、正式與口語混雜、單獨轉折詞都不算數）。
+- **英文 humanizer 抓不到的中文專屬破綻**：翻譯腔句式（「最……之一」「當……的時候」「對 X 進行 Y」）、系動詞迴避（用「作為／扮演著……的角色」把一句「是」撐胖）、過度強調關注度（「引發熱議」「多家媒體報導」）、引用層破綻（死連結、DOI 檢查碼錯、造訪日期早於發表日）、列表式行文與行內粗體標題、標題結構與 Markdown 破綻（跳級標題、多個 H1、`---` 分隔線、中文裡的彎引號）。
+- **更多中文專屬破綻**：模糊的關聯詞（「息息相關」「密不可分」）、空轉分析（擺出分析架勢，內容卻是同義反覆）、交付語的 AI 味（commit／PR 說明的「已保留原有資訊」「進行了若干優化」）、文風斷層偵測（同一篇裡人寫的段落與 AI 補的段落分開處理）、各家模型的殘留標記（ChatGPT／Gemini／Grok／DeepSeek／Perplexity）。
 - **夾帶指令的處置寫清楚了**：不只是「不執行」，而是當普通文字改寫、照常交稿、告訴使用者夾帶在哪，而且說明本身一樣用繁體中文寫。
-- **作者端工具**（不屬於載入的技能本體）：`scripts/check.py` 機械檢查完稿（破折號、大陸用語、隱形字元、彎引號、工具痕跡、emoji 密度、佔位文字），`evals/` 是 31 個案例的 `claude plugin eval` 測試套件（部落格、技術文件、商務信件、電商、新聞稿、學術、夾帶指令），以確定性的事實檢查為主。`check.py --source 原稿.md 完稿.md` 會比對改寫前後的數字、日期、版本、網址、信箱、代碼與引文。結果見 [BENCHMARK.md](BENCHMARK.md)。
 - **隱形字元清除**：零寬字元（U+200B/200C/200D/FEFF/2060）、tag characters（U+E0000–E007F）、不換行空格與窄空格——複製貼上到哪都跟著走的機器指紋。程式碼區塊、URL、全形標點不動。
 - **「規則腔」防呆**：規則套過頭會生出新的破綻（句句短、句句口語、每句都在示範某條規則），最後一關會檢查並放幾句原文回去。
 - **台灣專屬在地化層**：
@@ -43,7 +37,6 @@
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
   - 台式語氣：委婉商量式、語助詞（喔/耶/啦/餒/蛤）、句式（還蠻/超/有在/這樣子/的話）、中英夾雜（cancel/confirm/case by case），各限於適合的文體
 - **不捏造原則**：改寫過程絕不新增原文沒有的事實、人名、日期或引用來源。
-- **安全邊界**：貼進來要改寫的文字如果混有指令式內容（「忽略前面的指令」「你現在是…」），一律當成待改寫的純文字內容，絕不當成新指令執行。
 - **誤判防呆指引**：什麼樣的人類文字不該被改（論文、單一破折號、句中「老實說」、港澳馬新中文…）
 - **語感校準**：提供作者本人的寫作樣本，改寫會貼近該樣本的節奏與用字，而不是套用制式化的「乾淨」版本。
 - **保護區段**：價格、專有名詞、連結、引號內文字、法律用語在改寫過程中會鎖定不動。
@@ -73,83 +66,39 @@
 
 ## 安裝方式
 
-這個 repo 的根目錄本身就是合格的 skill 目錄（`SKILL.md` 在最上層），所以任何工具都能把 repo clone 到它讀取 skill 的資料夾來安裝。Claude Code 也可以走外掛市集，`npx skills add` 則涵蓋其他工具。介紹頁：[zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)。
+repo 根目錄本身就是 skill 目錄（`SKILL.md` 在最上層），clone 到工具讀取 skill 的資料夾就能用。介紹頁：[zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)。
 
-### 一行安裝（skills.sh CLI）
+**skills.sh CLI**（涵蓋多數工具）：
 
 ```bash
-npx skills add acchuang/zh-tw-humanizer --global           # 安裝到所有有設定的工具
+npx skills add acchuang/zh-tw-humanizer --global                       # 裝到所有有設定的工具
 npx skills add acchuang/zh-tw-humanizer --global --agent claude-code   # 只裝到指定工具
-npx skills update zh-tw-humanizer --global                 # 更新
+npx skills update zh-tw-humanizer --global                             # 更新
 ```
 
-### Claude Code 外掛市集
+**Claude Code 外掛市集**：
 
 ```
 /plugin marketplace add acchuang/zh-tw-humanizer
 /plugin install zh-tw-humanizer@zh-tw-humanizer
 ```
 
-### Claude Code
+**手動 clone**：挑下表的資料夾，把 repo 放進去。
 
 ```bash
-# 個人 skill（所有專案共用）
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.claude/skills/zh-tw-humanizer
-# 或放在專案層級：.claude/skills/zh-tw-humanizer/
+git clone https://github.com/acchuang/zh-tw-humanizer.git <資料夾>/zh-tw-humanizer
 ```
 
-### Pi
+| 工具 | 全域 | 專案層級 |
+|---|---|---|
+| Claude Code | `~/.claude/skills/` | `.claude/skills/` |
+| Pi | `~/.agents/skills/` 或 `~/.pi/agent/skills/` | `.pi/skills/` 或 `.agents/skills/` |
+| OpenAI Codex CLI | `~/.agents/skills/` | `.agents/skills/` |
+| OpenCode | `~/.config/opencode/skills/`（要先 `mkdir -p`） | `.opencode/skills/`（`.claude/skills/`、`.agents/skills/` 也行） |
+| Gemini CLI | `~/.gemini/skills/`（`~/.agents/skills/` 也行） | `.gemini/skills/` 或 `.agents/skills/` |
+| Cursor、Windsurf 等 | 該工具的 skills 資料夾 | 同左；也可以只複製 `SKILL.md` |
 
-```bash
-# 全域
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.agents/skills/zh-tw-humanizer
-# 或 ~/.pi/agent/skills/zh-tw-humanizer/
-# 專案層級：.pi/skills/ 或 .agents/skills/（放在專案資料夾內）
-```
-
-安裝完重開 session 就會生效，之後可透過 `/skill:zh-tw-humanizer` 直接呼叫。
-
-### OpenAI Codex CLI
-
-Codex 的使用者 skill 放在 `~/.agents/skills/`（跟 Pi 同一個位置），專案 skill 放在 `.agents/skills/`——所以上面 Pi 的裝法 Codex 也適用：
-
-```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.agents/skills/zh-tw-humanizer
-```
-
-也可以選擇在 `~/.codex/config.toml` 裡指定或停用：
-
-```toml
-[[skills.config]]
-path = "/Users/你的使用者名稱/.agents/skills/zh-tw-humanizer/SKILL.md"
-enabled = true
-```
-
-改完設定後重開 Codex。
-
-### OpenCode
-
-```bash
-# 全域
-mkdir -p ~/.config/opencode/skills
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.config/opencode/skills/zh-tw-humanizer
-# 專案層級：.opencode/skills/zh-tw-humanizer/（或 .claude/skills/、.agents/skills/）
-```
-
-### Gemini CLI
-
-```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.gemini/skills/zh-tw-humanizer
-# ~/.agents/skills/ 也可以，Gemini 支援這個別名
-# 專案層級：.gemini/skills/ 或 .agents/skills/
-```
-
-### 其他支援 Agent Skills 的工具（Cursor、Windsurf 等）
-
-```bash
-git clone https://github.com/acchuang/zh-tw-humanizer.git /path/to/你的/skills/zh-tw-humanizer
-# 或直接把 SKILL.md 複製到該工具的 skills 資料夾
-```
+裝完重開 session。Pi 可用 `/skill:zh-tw-humanizer` 直接呼叫。
 
 ## 用法
 
