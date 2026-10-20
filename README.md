@@ -121,7 +121,7 @@ git clone https://github.com/acchuang/zh-tw-humanizer.git ~/.agents/skills/zh-tw
 
 ```toml
 [[skills.config]]
-path = "/Users/你/你的家目錄/.agents/skills/zh-tw-humanizer/SKILL.md"
+path = "/Users/你的使用者名稱/.agents/skills/zh-tw-humanizer/SKILL.md"
 enabled = true
 ```
 

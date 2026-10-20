@@ -22,7 +22,7 @@ The pitch is that a rewrite changes the voice and nothing else: no invented fact
 - **Pattern hints**: `python3 scripts/check.py --patterns draft.md` lists hits on each pattern's watch-words with the pattern number. Advisory only (never fails); the word list is read from `SKILL.md`.
 - **Vocabulary scan scope**: glossary rows tagged with a context (程序, 代碼, 通過, 水平, 運行, 調用, 項目, 支持) can't be told apart mechanically, so `check.py` skips them and you judge those by hand. Overlapping terms report once, leftmost and longest (視頻通話 no longer also reports 視頻).
 
-Per-case numbers, caveats and and the unresolved `soup-blog-heavy` tie are in [BENCHMARK.md](BENCHMARK.md). Two runs per arm per case, default model only.
+Per-case numbers, caveats and the unresolved `soup-blog-heavy` tie are in [BENCHMARK.md](BENCHMARK.md). Two runs per arm per case, default model only.
 
 ## What it covers
 
