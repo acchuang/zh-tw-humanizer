@@ -33,7 +33,7 @@ Per-case numbers, caveats and the unresolved `soup-blog-heavy` tie are in [BENCH
 - **Invisible-character cleanup**: zero-width chars (U+200B/200C/200D/FEFF/2060), tag characters (U+E0000–E007F), NBSP and narrow spaces — the provenance markers that survive every copy-paste. Code blocks, URLs, and full-width punctuation stay untouched.
 - **"Rule-flavor" guard**: over-applying the rules produces its own tell (every sentence short, colloquial, and demonstrating a rule). The final pass checks for it and puts some original sentences back.
 - **Taiwan-only localization layer**:
-  - 157 組大陸用語（含「台灣也用」不誤殺清單） → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
+  - 157 組大陸用語（148 組機器可查，9 組要看語境；另有「台灣也用」不誤殺清單） → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
   - 台式語氣：委婉商量式、語助詞（喔/耶/啦/餒/蛤）、句式（還蠻/超/有在/這樣子/的話）、中英夾雜（cancel/confirm/case by case），各限於適合的文體
 - **No-fabrication rule**: rewrites never add facts, names, dates, or citations that aren't in the source text.
