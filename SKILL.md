@@ -15,7 +15,8 @@ description: |
   也用在改寫中文的公告、客戶信、電子報、貼文、README 時。
 license: MIT
 metadata:
-  version: "1.8.1"
+  version: "1.9.0"
+  upstream-reviewed: "2026-11-02"
 ---
 
 # 台式中文去 AI 味編輯（Taiwanese Chinese Humanizer）
