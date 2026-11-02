@@ -230,10 +230,32 @@ def facts(text):
     return out
 
 
+FENCE_BLOCK_RE = re.compile(r"^```.*?^```", re.S | re.M)
+LINK_RE = re.compile(r"\[[^\]\n]+\]\([^)\s]+\)")
+HEADING_RE = re.compile(r"^#{1,6}\s", re.M)
+TABLE_ROW_RE = re.compile(r"^\s*\|.*\|\s*$", re.M)
+
+
+def structure(text):
+    """Markdown 骨架的數量：程式碼區塊、連結、標題、表格列。"""
+    blocks = FENCE_BLOCK_RE.findall(text)
+    prose = FENCE_BLOCK_RE.sub("", text)
+    return {
+        "程式碼區塊": len(blocks),
+        "連結": len(LINK_RE.findall(prose)),
+        "標題": len(HEADING_RE.findall(prose)),
+        "表格列": len(TABLE_ROW_RE.findall(prose)),
+    }
+
+
 def compare(source, draft):
-    """回傳 [(規則, 說明)]：原稿的事實掉了、或改寫憑空多了。"""
+    """回傳 [(規則, 說明)]：原稿的事實掉了、或改寫憑空多了、或 Markdown 骨架變了。"""
     src, new = facts(source), facts(draft)
     hits = []
+    s_struct, n_struct = structure(source), structure(draft)
+    for kind, before in s_struct.items():
+        if before != n_struct[kind]:
+            hits.append(("結構變動", f"{kind}原稿 {before} 個，改寫後 {n_struct[kind]} 個"))
     for kind, items in src.items():
         for item in sorted(items - new[kind]):
             hits.append(("遺失事實", f"{kind}{item}原稿有，改寫後不見了"))
@@ -291,6 +313,16 @@ def self_test():
     assert any(r == "新增事實" and "73.6" in n for r, n in compare(src, ok + "有 73.6% 的人同意。"))
     # 條列編號不算新增數字
     assert compare("甲乙", "1. 甲\n2. 乙") == []
+    # Markdown 骨架：連結變裸網址、程式碼區塊被吃掉、標題或表格列少了
+    md = "# 標題\n\n見 [文件](https://a.com)。\n\n```\ncode\n```\n\n| a | b |\n|---|---|\n| 1 | 2 |\n"
+    assert compare(md, md) == [], compare(md, md)
+    gone = lambda d, k: any(r == "結構變動" and k in n for r, n in compare(md, d))
+    assert gone(md.replace("[文件](https://a.com)", "https://a.com"), "連結")
+    assert gone(md.replace("```\ncode\n```", "code"), "程式碼區塊")
+    assert gone(md.replace("# 標題\n\n", ""), "標題")
+    assert gone(md.replace("| 1 | 2 |\n", ""), "表格列")
+    # 程式碼區塊裡的 # 註解不算標題
+    assert structure("```\n# note\n```")["標題"] == 0
     # 注意詞提示
     words = [(10, "專家指出"), (15, "未來可期")]
     assert [h[2:] for h in scan_patterns("專家指出，公司未來可期。", words)] == [(10, "專家指出"), (15, "未來可期")]
