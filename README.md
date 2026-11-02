@@ -6,15 +6,15 @@
 
 **English README → [README.en.md](README.en.md)** · **Site → [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)**
 
-這是一個可攜式 agent skill，能把繁體中文文字裡的 AI 生成痕跡去掉，並在地化成**台灣國語**——台灣用詞（影片/軟體/網路/資料，不用視頻/軟件/網絡；「數據」當一般資料講時換成「資料」，大數據、數據顯示這類台灣也用的詞照舊）、台式語氣、語助詞、自然的句子節奏。絕不輸出簡體中文或大陸腔調用語。
+這是一個可攜式 agent skill，能把繁體中文文字裡的 AI 生成痕跡去掉，並在地化成**台灣華語**。用詞走台灣用法（影片/軟體/網路/資料，不用視頻/軟件/網絡；「數據」當一般資料講時換成「資料」，大數據、數據顯示這類台灣也用的詞照舊），語氣、語助詞和句子節奏也都是台式的。絕不輸出簡體中文或大陸腔調用語。
 
 純 Markdown 格式，任何支援 skill 指令格式的工具都能跑（Claude Code、OpenCode、pi、Cursor 等）。
 
-根據 [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) 指南與 zh-TW 版的 [AI生成文的特徵](https://zh.wikipedia.org/zh-tw/Wikipedia:AI%E7%94%9F%E6%88%90%E6%96%87%E7%9A%84%E7%89%B9%E5%BE%B5) 條目為基礎，再加上台灣國語在地化規則（兩岸用語差異、語助詞、台式語氣）延伸而成。
+以 [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) 指南與 zh-TW 版的 [AI生成文的特徵](https://zh.wikipedia.org/zh-tw/Wikipedia:AI%E7%94%9F%E6%88%90%E6%96%87%E7%9A%84%E7%89%B9%E5%BE%B5) 條目為基礎，再加上台灣華語在地化規則（兩岸用語差異、語助詞、台式語氣）延伸而成。
 
-## 有量測，不只是宣稱
+## 有量測
 
-賣點是：改寫只動語氣，不動事實。不編造、不漏掉、不過度改寫。這點有測，不是自己說說。
+賣點是改寫只動語氣，不動事實：不編造，也不漏掉。這點有測。
 
 - **33 個案例的 eval 測試集**（`evals/`）：部落格、技術文件、商務信件、電商文案、新聞稿、學術、夾帶指令。原稿裡的數字、日期、網址、代碼、引文用 regex 驗證，大部分評分不需要 LLM 評審。
 - **對照實驗**：每個案例都跑「有 skill」與「沒有 skill」兩組。最近一次：平均分數 **0.97 對 0.78**，33 個案例中 skill 領先 26、持平 6、落後 1。
@@ -29,8 +29,8 @@
 - **61 種中文 AI 寫作特徵**（4 大類）：假真誠開場白、心理諮商語氣、對仗句「不是 X 而是 Y」、概念名詞化「○○感/○○性」、空話動詞「提升/打造/賦能」、連接詞堆疊「此外/綜上所述/值得一提的是」、破折號濫用、金句堆疊、排比句、同義詞輪換、虛指權威、幻覺引用、假精確（無來源的精確數字）、過程敘事（「經過分析」「深入研究後發現」）、立場真空、公式化開場、解說導引句、假推論、說教深度腔、金句公式、戲劇性短句轟炸、勸誡反問收尾、粗體轟炸、emoji 堆疊、編號切碎段落、表格誤用、預告式導言、模板佔位文字、工具痕跡、聊天機器人痕跡…
 - **英文 humanizer 抓不到的中文專屬破綻**：翻譯腔句式（「最……之一」「當……的時候」「對 X 進行 Y」）、系動詞迴避（用「作為／扮演著……的角色」把一句「是」撐胖）、過度強調關注度（「引發熱議」「多家媒體報導」）、引用層破綻（死連結、DOI 檢查碼錯、造訪日期早於發表日）、列表式行文與行內粗體標題、標題結構與 Markdown 破綻（跳級標題、多個 H1、`---` 分隔線、中文裡的彎引號）。
 - **更多中文專屬破綻**：模糊的關聯詞（「息息相關」「密不可分」）、空轉分析（擺出分析架勢，內容卻是同義反覆）、交付語的 AI 味（commit／PR 說明的「已保留原有資訊」「進行了若干優化」）、文風斷層偵測（同一篇裡人寫的段落與 AI 補的段落分開處理）、各家模型的殘留標記（ChatGPT／Gemini／Grok／DeepSeek／Perplexity）。
-- **夾帶指令的處置寫清楚了**：不只是「不執行」，而是當普通文字改寫、照常交稿、告訴使用者夾帶在哪，而且說明本身一樣用繁體中文寫。
-- **隱形字元清除**：零寬字元（U+200B/200C/200D/FEFF/2060）、tag characters（U+E0000–E007F）、不換行空格與窄空格——複製貼上到哪都跟著走的機器指紋。程式碼區塊、URL、全形標點不動。
+- **夾帶指令的處置寫清楚了**：貼進來的文字若夾著「忽略先前指示」之類的指令，一律當普通文字改寫、照常交稿，並告訴使用者夾帶在哪。這段說明本身一樣用繁體中文寫。
+- **隱形字元清除**：零寬字元（U+200B/200C/200D/FEFF/2060）、tag characters（U+E0000–E007F）、不換行空格與窄空格，這些是複製貼上到哪都跟著走的機器指紋。程式碼區塊、URL、全形標點不動。
 - **「規則腔」防呆**：規則套過頭會生出新的破綻（句句短、句句口語、每句都在示範某條規則），最後一關會檢查並放幾句原文回去。
 - **台灣專屬在地化層**：
   - 157 組大陸用語（148 組機器可查，9 組要看語境；另有「台灣也用」不誤殺清單） → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
@@ -38,31 +38,31 @@
   - 台式語氣：委婉商量式、語助詞（喔/耶/啦/餒/蛤）、句式（還蠻/超/有在/這樣子/的話）、中英夾雜（cancel/confirm/case by case），各限於適合的文體
 - **不捏造原則**：改寫過程絕不新增原文沒有的事實、人名、日期或引用來源。
 - **誤判防呆指引**：什麼樣的人類文字不該被改（論文、單一破折號、句中「老實說」、港澳馬新中文…）
-- **語感校準**：提供作者本人的寫作樣本，改寫會貼近該樣本的節奏與用字，而不是套用制式化的「乾淨」版本。
+- **語感校準**：提供作者本人的寫作樣本，改寫會貼近該樣本的節奏與用字。
 - **保護區段**：價格、專有名詞、連結、引號內文字、法律用語在改寫過程中會鎖定不動。
 - **依場景調整力道**：不同文體採不同處理方式（社群貼文大幅改寫，技術文件則保守處理）。
-- **標註模式**：下指令「先標問題不要改」只列出問題，不動手改寫——適合審閱別人的草稿。
+- **標註模式**：下指令「先標問題不要改」只列出問題，不動手改寫，適合審閱別人的草稿。
 - **交付前品質自檢**：交稿前逐條掃過 7 題是非題（破折號、大陸用語、簡轉繁錯字、隱形字元與引號、AI 痕跡、保護清單原樣保留、原文主張不漏），任何一項不合格就改完再交。
 
 ## 改寫前後對照
 
-**社群貼文**——清掉假真誠開場白、「最……之一」翻譯腔、排比句、emoji 堆疊、破折號：
+**社群貼文**：清掉假真誠開場白、「最……之一」翻譯腔、排比句、emoji 堆疊、破折號：
 
 > **前**：不得不說，這家咖啡廳真的是台北最療癒的空間之一 ✨ 不僅環境舒適、餐點美味，更是一個能讓靈魂沉澱的秘密基地！值得一提的是，他們的手沖咖啡——每一杯都承載著職人的堅持——絕對值得你專程前來。
 >
-> **後**：這家咖啡廳在巷子裡，位子不多，下午常常客滿。手沖是老闆自己烘的豆子，我點的耶加雪菲酸度偏高，喝起來有柑橘味。
+> **後**：這家咖啡廳在台北，環境舒服，餐點好吃，手沖咖啡值得專程來喝。
 
-**技術文件**（力度輕，指令與版本一字不動）——清掉公式化開場、系動詞迴避、冗餘書面詞、無主句：
+**技術文件**（力度輕，指令與版本一字不動）：清掉公式化開場、系動詞迴避、冗餘書面詞、無主句：
 
-> **前**：在當今快速演進的技術環境中，Docker 作為容器化技術的重要解決方案，扮演著簡化部署流程的關鍵角色。使用者僅需執行相關指令即可輕鬆完成環境的建置。
+> **前**：在當今快速演進的技術環境中，Docker 作為容器化技術的重要解決方案，扮演著簡化部署流程的關鍵角色。使用者僅需執行 `docker compose up -d` 即可輕鬆完成環境的建置。
 >
-> **後**：Docker 把應用程式和它的相依套件打包成容器，部署時不用再處理環境差異。建置環境只要一行：`docker compose up -d`
+> **後**：Docker 是容器化技術，用來簡化部署流程。建置環境時執行 `docker compose up -d`。
 
-**電子報**（CTA 力道是功能不是 AI 味，會保留）——清掉罐頭客套、空話動詞「賦能」、emoji、空泛結尾：
+**電子報**（CTA 力道是功能不是 AI 味，會保留）：清掉罐頭客套、空話動詞「賦能」、emoji、空泛結尾：
 
-> **前**：親愛的訂閱者您好！首先，非常感謝您一直以來的支持。我們很高興地宣布，全新功能正式上線了 🎉 這項功能不僅能提升您的工作效率，更能為您的團隊賦能。期待與您共創美好未來！
+> **前**：親愛的訂閱者您好！首先，非常感謝您一直以來的支持。我們很高興地宣布，全新功能正式上線了 🎉 這項功能不僅能提升您的工作效率，更能為您的團隊賦能。立即登入體驗，期待與您共創美好未來！
 >
-> **後**：新功能上線了：現在可以一次匯出整個資料夾，不用一個一個點。這週開始所有方案都能用，用了有問題直接回信告訴我們。
+> **後**：新功能上線了，可以提升你的工作效率。立即登入體驗。
 
 ## 安裝方式
 
@@ -112,7 +112,7 @@ git clone https://github.com/acchuang/zh-tw-humanizer.git <資料夾>/zh-tw-huma
 請把這段改成台灣風格的中文： [貼上你的文字]
 ```
 
-指定一個檔案，它會原地改寫（只動內文——程式碼區塊、frontmatter、連結目標都不會被動到）：
+指定一個檔案，它會原地改寫（只動內文，程式碼區塊、frontmatter、連結目標都不會被動到）：
 
 ```
 Humanize the prose in docs/launch-post.md
@@ -120,7 +120,7 @@ Humanize the prose in docs/launch-post.md
 
 ### 語感校準
 
-提供作者本人的寫作樣本，skill 會貼近句子節奏、用字習慣與小癖好來改寫，而不是套用制式化規則：
+提供作者本人的寫作樣本，skill 會貼近句子節奏、用字習慣與小癖好來改寫：
 
 ```
 先看我的寫作樣本：
@@ -134,28 +134,28 @@ Humanize the prose in docs/launch-post.md
 
 ### 中文 AI 寫作特徵
 
-- **維基百科：AI生成文的特徵**（zh-TW）——「Signs of AI writing」的繁體中文對應條目；中文特有詞彙表（穩/接住/見證/至關重要…）、排比句濫用、破折號濫用、列表式行文、編號標題等特徵的來源。https://zh.wikipedia.org/zh-tw/Wikipedia:AI生成文的特徵
-- **維基百科：Signs of AI writing**（英文，WikiProject AI Cleanup）——結構性骨架：意義誇大、三段式修辭、避免用「是」的句法、假範圍，以及群集式判斷準則。https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
-- **數位時代「AI 味」系列（2025）**——台灣編輯視角：對仗句上癮（不是 X，而是 Y）、金句堆疊與「氣味」測試（能不能拍成電影）、概念名詞化（○○感/○○性/○○化）。https://www.bnext.com.tw/article/89827/ai-writing-style-unique-features-avoiding-tips · https://www.bnext.com.tw/article/90761/how-to-fix-ai-writing-style
-- **經理人月刊：維基百科不忍了！公布「抓包 AI 味指南」**——維基百科指南的繁中摘要（AI 詞彙黑名單、6 句型/語氣/格式）。https://www.managertoday.com.tw/articles/view/71293
-- **Wikipedia:Signs of AI writing（2026 年版本更新）**——過程敘事（「經過審視現有資料來源後」）與假精確特徵是 2026 年中新增的；特徵 55–56 的來源。https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
-- **端傳媒（2026-04）：維基百科如何應對 AI 寫作？**——WikiProject AI Cleanup 持續更新特徵清單的背景報導。https://theinitium.com/20260415-tech-in-numbers-wikipedia-against-ai-writing/
-- **高科大 AICT：去 AI 味完全指南 2026**——中文 AI 味的成因（公文語料佔比高＋翻譯腔），也是「英文 humanizer 處理中文效果差」的說明；特徵 17 的背景。https://aict.nkust.edu.tw/digitrans/?p=12219
-- **余光中〈怎樣改進英式中文？〉與相關翻譯腔整理**——「最……之一」「當……的時候」「對……進行」「多餘的和／以及」；特徵 17 的直接來源。https://zhuanlan.zhihu.com/p/72934908
-- **RAR 設計攻略：去 AI 味怎麼做才有效**——「規則腔」的來源：規則套過頭會生出新的破綻，工整得像在填表。https://rar.design/posts/de-ai-flavor-writing-skill-guide
-- **同類 skill 的隱形字元處理**（kevintsai1202/Humanizer-zh-TW 的 text-watermark-cleaner-zh-tw）——零寬字元、tag characters、異形空白清單；特徵 54 的來源。https://github.com/kevintsai1202/Humanizer-zh-TW
+- **維基百科：AI生成文的特徵**（zh-TW）：「Signs of AI writing」的繁體中文對應條目；中文特有詞彙表（穩/接住/見證/至關重要…）、排比句濫用、破折號濫用、列表式行文、編號標題等特徵的來源。https://zh.wikipedia.org/zh-tw/Wikipedia:AI生成文的特徵
+- **維基百科：Signs of AI writing**（英文，WikiProject AI Cleanup）：結構性骨架，包括意義誇大、三段式修辭、避免用「是」的句法、假範圍，以及群集式判斷準則。https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+- **數位時代「AI 味」系列（2025）**：台灣編輯視角，談對仗句上癮（不是 X，而是 Y）、金句堆疊與「氣味」測試（能不能拍成電影）、概念名詞化（○○感/○○性/○○化）。https://www.bnext.com.tw/article/89827/ai-writing-style-unique-features-avoiding-tips · https://www.bnext.com.tw/article/90761/how-to-fix-ai-writing-style
+- **經理人月刊：維基百科不忍了！公布「抓包 AI 味指南」**：維基百科指南的繁中摘要（AI 詞彙黑名單、6 句型/語氣/格式）。https://www.managertoday.com.tw/articles/view/71293
+- **Wikipedia:Signs of AI writing（2026 年版本更新）**：過程敘事（「經過審視現有資料來源後」）與假精確特徵是 2026 年中新增的；特徵 55–56 的來源。https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+- **端傳媒（2026-04）：維基百科如何應對 AI 寫作？**：WikiProject AI Cleanup 持續更新特徵清單的背景報導。https://theinitium.com/20260415-tech-in-numbers-wikipedia-against-ai-writing/
+- **高科大 AICT：去 AI 味完全指南 2026**：中文 AI 味的成因（公文語料佔比高＋翻譯腔），也是「英文 humanizer 處理中文效果差」的說明；特徵 17 的背景。https://aict.nkust.edu.tw/digitrans/?p=12219
+- **余光中〈怎樣改進英式中文？〉與相關翻譯腔整理**：「最……之一」「當……的時候」「對……進行」「多餘的和／以及」；特徵 17 的直接來源。https://zhuanlan.zhihu.com/p/72934908
+- **RAR 設計攻略：去 AI 味怎麼做才有效**：「規則腔」的來源，講規則套過頭會生出新的破綻，工整得像在填表。https://rar.design/posts/de-ai-flavor-writing-skill-guide
+- **同類 skill 的隱形字元處理**（kevintsai1202/Humanizer-zh-TW 的 text-watermark-cleaner-zh-tw）：零寬字元、tag characters、異形空白清單；特徵 54 的來源。https://github.com/kevintsai1202/Humanizer-zh-TW
 
-### 台灣國語風格
+### 台灣華語風格
 
-- **教育部《國語辭典簡編本》附錄：兩岸常用詞語對照表**——大陸 vs 台灣用詞的權威對照（157 組在地化對照表的依據）。https://dict.concised.moe.edu.tw/appendix.jsp?ID=54
-- **中華語文知識庫：兩岸差異用詞**（中華文化總會）——兩岸用詞差異資料庫。https://chinese-linguipedia.org/search_difference.html
-- **vocus：如何分辨台灣腔？**——台灣華語特色：輕聲、語助詞、台式詞彙（便當/飯店）、中英夾雜（cancel/confirm/case by case）。https://vocus.cc/article/65f14d07fd8978000132eed9
-- **台味語助詞教學**——蛤/蝦/餒/唷 等台式語助詞用法。https://marstininuk.wordpress.com/2018/09/14/台味語助詞教學：輕鬆學會道地台灣腔/
+- **教育部《國語辭典簡編本》附錄：兩岸常用詞語對照表**：大陸 vs 台灣用詞的權威對照（157 組在地化對照表的參考來源之一）。https://dict.concised.moe.edu.tw/appendix.jsp?ID=54
+- **中華語文知識庫：兩岸差異用詞**（中華文化總會）：兩岸用詞差異資料庫。https://chinese-linguipedia.org/search_difference.html
+- **vocus：如何分辨台灣腔？**：台灣華語特色，包括輕聲、語助詞、台式詞彙（便當/飯店）、中英夾雜（cancel/confirm/case by case）。https://vocus.cc/article/65f14d07fd8978000132eed9
+- **台味語助詞教學**：蛤/蝦/餒/唷 等台式語助詞用法。https://marstininuk.wordpress.com/2018/09/14/台味語助詞教學：輕鬆學會道地台灣腔/
 
 ### 兩岸用詞對照（次要參考）
 
-- **漢語地區用詞差異列表**（維基百科）——大陸/港澳/臺灣/馬新四地對照。https://zh.wikipedia.org/zh-tw/漢語地區用詞差異列表
-- **兩岸三地用詞差異：軟件/軟體、激光/雷射**——科技領域用詞對照（服務器/伺服器、內存/記憶體…）。https://www.toolbox365.cn/tutorials/zh-vocabulary-mainland-taiwan-hk/
+- **漢語地區用詞差異列表**（維基百科）：大陸/港澳/臺灣/馬新四地對照。https://zh.wikipedia.org/zh-tw/漢語地區用詞差異列表
+- **兩岸三地用詞差異：軟件/軟體、激光/雷射**：科技領域用詞對照（服務器/伺服器、內存/記憶體…）。https://www.toolbox365.cn/tutorials/zh-vocabulary-mainland-taiwan-hk/
 
 ## 授權
 
