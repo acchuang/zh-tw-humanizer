@@ -18,6 +18,7 @@ Markdown 骨架（程式碼區塊、連結、標題、表格列）的數量變�
 """
 
 import re
+import statistics
 import sys
 from pathlib import Path
 
@@ -127,6 +128,41 @@ def scan_patterns(text, words=None):
             col = m.start() - (prose.rfind("\n", 0, m.start()) + 1) + 1
             hits.append((line, col, num, w))
     return sorted(hits)
+
+
+def _clen(s):
+    return len(re.sub(r"[\s\W_]", "", s))
+
+
+def rhythm(text):
+    """節奏提示，回傳 [(行, 說明)]。只看散文段落，標題、表格、條列不算。
+    ponytail: 門檻是經驗值（短句 ≤6 字、變異係數 0.25／0.15），誤報多再調。"""
+    prose = strip_protected(text)
+    paras, start, buf = [], 1, []
+    for i, line in enumerate(prose.split("\n") + [""], 1):
+        if line.strip() and not re.match(r"\s*(#|\||[-*+] |\d+[.)] |>)", line):
+            if not buf:
+                start = i
+            buf.append(line.strip())
+        elif buf:
+            paras.append((start, "".join(buf)))
+            buf = []
+    out, sents = [], []
+    for start, p in paras:
+        ss = [s for s in re.split(r"(?<=[。！？!?])", p) if _clen(s)]
+        sents += ss
+        run = 0
+        for s in ss:
+            run = run + 1 if _clen(s) <= 6 else 0
+            if run == 3:
+                out.append((start, "連續三句以上的短句（模式 23）"))
+                break
+    cv = lambda xs: statistics.pstdev(xs) / statistics.mean(xs)
+    if len(sents) >= 8 and cv([_clen(s) for s in sents]) < 0.25:
+        out.append((1, "句子長度太平均，長短沒有變化"))
+    if len(paras) >= 4 and cv([_clen(p) for _, p in paras]) < 0.15:
+        out.append((1, "段落長度太平均"))
+    return out
 
 
 def strip_protected(text):
@@ -329,6 +365,17 @@ def self_test():
     assert [h[2:] for h in scan_patterns("專家指出，公司未來可期。", words)] == [(10, "專家指出"), (15, "未來可期")]
     assert scan_patterns("`專家指出`", words) == []
     assert len(load_watchwords()) >= 100, "讀不到注意詞，SKILL.md 格式可能變了"
+    # 節奏提示
+    notes = lambda t: [n for _, n in rhythm(t)]
+    assert any("模式 23" in n for n in notes("一切都變了。沒有回頭路。我們只能向前。"))
+    assert not notes("好。我們走吧，天快黑了，再晚就趕不上末班車。")
+    assert not notes("- 一\n- 二\n- 三")
+    flat = "".join(f"第{i}句寫得一樣長長的。" for i in range(8))
+    assert any("句子長度" in n for n in notes(flat))
+    mixed = "好。" + "這一句故意寫得比較長，讓整段的句子長短有明顯的落差。" * 4 + "對。很好。然後呢，我們再看看接下來要怎麼走才對。"
+    assert not any("句子長度" in n for n in notes(mixed))
+    assert any("段落" in n for n in notes("\n\n".join(["這是一段剛好十二個字。"] * 4)))
+    assert rhythm("\n\n第二段開頭。好。對。是。")[0][0] == 3
     # 真的讀得到 SKILL.md 的表
     real = load_vocab()
     assert len(real) >= 145, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
@@ -374,8 +421,11 @@ def main(argv):
         total += report("<stdin>", sys.stdin.read())
     if hint:
         for p in paths:
-            for line, col, num, w in scan_patterns(Path(p).read_text(encoding="utf-8")):
+            text = Path(p).read_text(encoding="utf-8")
+            for line, col, num, w in scan_patterns(text):
                 print(f"{p}:{line}:{col}  提示  模式 {num}：{w}")
+            for line, note in rhythm(text):
+                print(f"{p}:{line}  提示  節奏：{note}")
     if total:
         print(f"\n{len(total)} 個機械破綻。改完再交稿。", file=sys.stderr)
         return 1

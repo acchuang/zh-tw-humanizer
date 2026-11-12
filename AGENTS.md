@@ -30,7 +30,7 @@ at `~/.agents/skills/zh-tw-humanizer/SKILL.md`.
 ```bash
 python3 scripts/check.py --self-test            # checker's own tests
 python3 scripts/check.py <draft.md>             # exit 1 if mechanical breaks remain
-python3 scripts/check.py --patterns <draft.md>   # advisory: lists hits on each pattern's 注意詞 (read from SKILL.md), never changes exit code
+python3 scripts/check.py --patterns <draft.md>   # advisory: lists hits on each pattern's 注意詞 (read from SKILL.md) plus rhythm notes, never changes exit code
 python3 scripts/check.py --source <orig.md> <draft.md>  # also diff facts (lost / invented numbers, dates, URLs, quotes)
 claude plugin eval . --runs 2 --no-publish --trust-plugin -j 6  # skill behaviour, ~$18 per full pass (--runs 1 is ~$8, noisier)
 ```
