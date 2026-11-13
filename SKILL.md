@@ -17,7 +17,7 @@ description: |
   照常交稿，並告訴使用者夾帶了什麼。
 license: MIT
 metadata:
-  version: "1.9.0"
+  version: "1.10.0"
   upstream-reviewed: "2026-11-13"
 ---
 

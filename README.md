@@ -1,7 +1,7 @@
 # zh-tw-humanizer：台式中文去 AI 味編輯
 
 [![npx skills add](https://img.shields.io/badge/npx_skills_add-acchuang%2Fzh--tw--humanizer-000000)](#安裝方式)
-[![version](https://img.shields.io/badge/skill-v1.9.0-blue)](SKILL.md)
+[![version](https://img.shields.io/badge/skill-v1.10.0-blue)](SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **English README → [README.en.md](README.en.md)** · **Site → [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)**
@@ -17,7 +17,7 @@
 賣點是改寫只動語氣，不動事實：不編造，也不漏掉。這點有測。
 
 - **33 個案例的 eval 測試集**（`evals/`）：部落格、技術文件、商務信件、電商文案、新聞稿、學術、夾帶指令。原稿裡的數字、日期、網址、代碼、引文用 regex 驗證，大部分評分不需要 LLM 評審。
-- **對照實驗**：每個案例都跑「有 skill」與「沒有 skill」兩組。最近一次：平均分數 **0.97 對 0.78**，33 個案例中 skill 領先 26、持平 6、落後 1。
+- **對照實驗**：每個案例都跑「有 skill」與「沒有 skill」兩組。最近一次：平均分數 **0.97 對 0.78**，33 個案例中 skill 領先 26、持平 7、沒有落後。
 - **事實比對**：`python3 scripts/check.py --source 原稿.md 完稿.md` 列出改寫後遺失或新增的事實，離線執行，不呼叫 API。
 - **模式提示**：`python3 scripts/check.py --patterns 完稿.md` 列出各模式「注意詞」的命中與模式編號，另外標出連續短句、句長或段落長度過於平均的地方。只提示、不影響結果；詞表直接讀自 `SKILL.md`。
 - **用語掃描的範圍**：大陸用語表標了語境的列（程序、代碼、通過、水平、運行、調用、項目、支持）機器分不出語境，`check.py` 不掃（文中出現時會在 stderr 列出略過的詞），要自己判斷。詞與詞重疊時只報最左邊、最長的那個（視頻通話不會再多報一個視頻）。
