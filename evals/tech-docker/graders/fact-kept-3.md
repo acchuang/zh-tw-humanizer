@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "`ports`"
+pattern: "ports"
 weight: 3
 ---

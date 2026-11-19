@@ -1,7 +1,7 @@
 # zh-tw-humanizer
 
 [![npx skills add](https://img.shields.io/badge/npx_skills_add-acchuang%2Fzh--tw--humanizer-000000)](#installation)
-[![version](https://img.shields.io/badge/skill-v1.10.0-blue)](SKILL.md)
+[![version](https://img.shields.io/badge/skill-v1.10.1-blue)](SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **繁體中文版 README → [README.md](README.md)** · **Site → [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)**
@@ -17,12 +17,12 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 The pitch is that a rewrite changes the voice and nothing else: no invented facts, no lost facts, no over-editing. That is tested, not asserted.
 
 - **33-case eval suite** (`evals/`): blog, tech docs, business email, e-commerce, press release, academic, prompt injection. Seeded numbers, dates, URLs, codes and quotes are checked by regex, so most grading needs no LLM judge.
-- **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.97 vs 0.78**, the skill ahead in 26 of 33 cases, tied in 7, behind in none.
-- **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite. Offline, no API calls.
-- **Pattern hints**: `python3 scripts/check.py --patterns draft.md` lists hits on each pattern's watch-words with the pattern number, and flags runs of short sentences or overly uniform sentence and paragraph lengths. Advisory only (never fails); the word list is read from `SKILL.md`.
-- **Vocabulary scan scope**: glossary rows tagged with a context (程序, 代碼, 通過, 水平, 運行, 調用, 項目, 支持) can't be told apart mechanically, so `check.py` skips them (listing any it skipped on stderr) and you judge those by hand. Overlapping terms report once, leftmost and longest (視頻通話 no longer also reports 視頻).
+- **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.99 vs 0.86**, the skill ahead in 19 of 33 cases, tied in 14, behind in none.
+- **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite (normalizing AI tracking params, with Markdown structure diffs as advisory hints), offline with no API calls. `check.py` also flags leftover simplified characters and high-confidence s2t conversion typos.
+- **Pattern hints**: `python3 scripts/check.py --patterns draft.md` (also works on stdin and alongside `--source`) lists hits on each pattern's watch-words with the pattern number, and flags runs of short sentences or overly uniform sentence and paragraph lengths. Advisory only (never fails); the word list is read from `SKILL.md`.
+- **Vocabulary scan scope**: the 17 context-tagged glossary rows (程序, 質量, 水平, 通過, 地鐵, 酒店, 菠蘿, 土豆, 代碼, 登錄, 運行, 調用, 項目, 支持, 雪糕, 紙巾, 本科) can't be told apart mechanically, so `check.py` skips them (listing any it skipped on stderr) and you judge those by hand. Overlapping terms report once, leftmost and longest (視頻通話 no longer also reports 視頻).
 
-Per-case numbers, caveats and the unmeasured `inject-leak` case (API safeguards rejected every run this pass) are in [BENCHMARK.md](BENCHMARK.md). Two runs per arm per case, default model only.
+Per-case numbers and known weaknesses (short product copy sometimes gets stripped to a single spec line) are in [BENCHMARK.md](BENCHMARK.md). Two runs per arm per case, default model only.
 
 ## What it covers
 
@@ -33,7 +33,7 @@ Per-case numbers, caveats and the unmeasured `inject-leak` case (API safeguards 
 - **Invisible-character cleanup**: zero-width chars (U+200B/200C/200D/FEFF/2060), tag characters (U+E0000–E007F), NBSP and narrow spaces — the provenance markers that survive every copy-paste. Code blocks, URLs, and full-width punctuation stay untouched.
 - **"Rule-flavor" guard**: over-applying the rules produces its own tell (every sentence short, colloquial, and demonstrating a rule). The final pass checks for it and puts some original sentences back.
 - **Taiwan-only localization layer**:
-  - 157 組大陸用語（148 組機器可查，9 組要看語境；另有「台灣也用」不誤殺清單） → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
+  - 157 組大陸用語（140 組機器可查，17 組要看語境；另有「台灣也用」不誤殺清單） → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
   - 台式語氣：委婉商量式、語助詞（喔/耶/啦/餒/蛤）、句式（還蠻/超/有在/這樣子/的話）、中英夾雜（cancel/confirm/case by case），各限於適合的文體
 - **No-fabrication rule**: rewrites never add facts, names, dates, or citations that aren't in the source text.

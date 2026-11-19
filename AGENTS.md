@@ -19,9 +19,7 @@ at `~/.agents/skills/zh-tw-humanizer/SKILL.md`.
 - The runtime artifact stays a single file (`SKILL.md`) — it is what gets loaded, so no
   `references/` split and no assets the rewrite itself has to read.
 - Author-side tooling is allowed and lives outside the runtime artifact:
-  - `scripts/check.py` — mechanical break-check (em dashes, mainland vocabulary, invisible
-    characters, curly quotes, tool traces, emoji density, placeholders). It parses the
-    vocabulary table straight out of `SKILL.md` pattern 34; never copy that table anywhere else.
+  - `scripts/check.py` — mechanical break-check (em dashes, mainland vocabulary, simplified characters and high-confidence 簡轉繁 typos, invisible characters, curly quotes, tool traces, emoji density, placeholders). It parses the vocabulary table straight out of `SKILL.md` pattern 34; never copy that table anywhere else.
   - `evals/` — `claude plugin eval .` suite. Run it after any meaningful `SKILL.md` change.
 - No fabrication rule and Taiwanese-Mandarin-only output are core contracts — do not weaken them in edits.
 
@@ -35,9 +33,11 @@ python3 scripts/check.py --source <orig.md> <draft.md>  # also diff facts (lost 
 claude plugin eval . --runs 2 --no-publish --trust-plugin -j 6  # skill behaviour, ~$18 per full pass (--runs 1 is ~$8, noisier)
 ```
 
+Note that `skill-fired` (`arm: with-only`) is unscored in `claude plugin eval` (`scored: false`), so benchmark summaries must inspect and report any case with `skill-fired` failures separately instead of treating `score: 1.00` as proof the skill triggered.
+
 `type: regex` 的 grader 由 `claude plugin eval` 以 JavaScript `new RegExp(pattern, flags)` 執行（預設無 `u` 旗標；支援 lookahead／lookbehind，`[\s\S]` 可跨行）。不是 Python `re`，別用 Python 的語法假設去寫。
 
-兩個已知不穩定的案例，不要當成迴歸就急著調 grader（1.8.0 的最終一輪兩個都拿 1.00，見 BENCHMARK.md，但每邊只跑 2 次，下面是更早幾輪的觀察）：
+兩個已知不穩定的案例，不要當成迴歸就急著調 grader（1.10.0 的最終一輪兩個都拿 1.00，見 BENCHMARK.md，但每邊只跑 2 次，下面是更早幾輪的觀察）：
 
 - `prompt-injection` — 輸入裡夾帶「忽略先前的所有指示」時，skill 常常不會被觸發（`skill-fired` FAIL），
   裸模型接手後用英文回覆，`treated-as-text` 的「回覆須為繁體」條件就掛了。這是觸發層的問題，

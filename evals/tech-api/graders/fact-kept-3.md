@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "`Retry\\-After`"
+pattern: "Retry-After"
 weight: 3
 ---

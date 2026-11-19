@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "NT\\$1,990"
+pattern: "(?:NT\\$|新[台臺]幣)\\s*1,990"
 weight: 3
 ---

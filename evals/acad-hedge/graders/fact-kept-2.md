@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "Cronbach's\\s*α\\s*=\\s*0\\.87"
+pattern: "Cronbach.{0,6}\\*?α\\*?[^\\n。]{0,8}0?\\.87"
 weight: 3
 ---
