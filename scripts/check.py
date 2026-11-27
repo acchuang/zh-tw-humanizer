@@ -193,16 +193,35 @@ def load_watchwords(skill_path=SKILL):
     return out
 
 
+ADVISORY_PATTERNS = [
+    (6, re.compile(r"(?:不是|不只是|不僅僅是)[^。！？\n]{1,20}[，,、]\s*(?:而是|更是|比較像)")),
+    (9, re.compile(r"賦能|深耕|助力|締造|煥新")),
+    (24, re.compile(r"(?:不是嗎|難道不是嗎|你還在等什麼)[？?]")),
+    (44, re.compile(r"首先[，,][\s\S]{1,160}其次[，,]")),
+    (60, re.compile(r"從[^。！？\n]{2,15}到[^。！？\n]{2,15}不等")),
+]
+
+
 def scan_patterns(text, words=None):
     """注意詞命中，回傳 [(行, 欄, 模式編號, 詞)]。命中不代表有問題，只是該看一眼。"""
     words = load_watchwords() if words is None else words
     prose = strip_protected(text)
-    hits = []
+    hits = set()
+
+    def add_hit(offset, num, label):
+        line = prose.count("\n", 0, offset) + 1
+        col = offset - (prose.rfind("\n", 0, offset) + 1) + 1
+        hits.add((line, col, num, label))
+
     for num, w in words:
         for m in re.finditer(re.escape(w), prose):
-            line = prose.count("\n", 0, m.start()) + 1
-            col = m.start() - (prose.rfind("\n", 0, m.start()) + 1) + 1
-            hits.append((line, col, num, w))
+            add_hit(m.start(), num, w)
+    for num, rx in ADVISORY_PATTERNS:
+        for m in rx.finditer(prose):
+            label = m.group(0).replace("\n", " ")
+            if len(label) > 24:
+                label = label[:24] + "…"
+            add_hit(m.start(), num, label)
     return sorted(hits)
 
 
@@ -280,6 +299,9 @@ def scan(text, vocab=None):
 
     for m in re.finditer(f'["\'](?=[{CJK}])|(?<=[{CJK}])["\']', prose):
         add(m.start(), "直引號", "模式 46：中文裡的英文引號，換成「」")
+
+    for m in re.finditer(f"(?<=[{CJK}])[,!?;:]", prose):
+        add(m.start(), "半形標點", f"模式 40：中文裡出現半形標點「{m.group(0)}」，換成全形")
 
     for m in SIMPLIFIED_RE.finditer(prose):
         add(m.start(), "簡體字", f"模式 35：出現簡體字「{m.group(0)}」")
@@ -459,6 +481,10 @@ def self_test():
     assert rules("見 https://a.com/?utm_source=chatgpt.com") == {"工具痕跡"}
     assert rules("打造“智慧”城市") == {"彎引號"}
     assert rules('他說"好"') == {"直引號"}
+    for hw in ("你好,世界", "太棒了!", "真的嗎?", "備註:無", "甲;乙"):
+        assert rules(hw) == {"半形標點"}, f"should flag half-width punct: {hw}"
+    for hw_ok in ("NT$1,680", "下午 14:30", "React, Vue 都能用", "`a:b`", "https://a.com/x?a=1"):
+        assert rules(hw_ok) == set(), f"false positive on {hw_ok}: {scan(hw_ok, vocab)}"
     assert rules("上線啦 🚀🎉🔥") == {"emoji 堆疊"}
     assert rules("上線啦 🚀") == set()
     assert rules("感謝您對【公司名稱】的支持") == {"佔位文字"}
@@ -508,6 +534,8 @@ def self_test():
     words = [(10, "專家指出"), (15, "未來可期")]
     assert [h[2:] for h in scan_patterns("專家指出，公司未來可期。", words)] == [(10, "專家指出"), (15, "未來可期")]
     assert scan_patterns("`專家指出`", words) == []
+    adv_nums = {h[2] for h in scan_patterns("這不只是更新，更是突破。我們賦能團隊，你還在等什麼？首先，看數據。其次，看結果。從日常到未來不等。", [])}
+    assert adv_nums == {6, 9, 24, 44, 60}, adv_nums
     watch = load_watchwords()
     assert len(watch) >= 100, f"注意詞太少（{len(watch)}），SKILL.md 格式可能變了"
     assert all(num != 36 for num, _ in watch)
@@ -525,20 +553,33 @@ def self_test():
     assert rhythm("\n\n第二段開頭。好。對。是。")[0][0] == 3
     # 真的讀得到 SKILL.md 的表
     real = load_vocab()
-    assert len(real) >= 138, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
+    assert len(real) >= 158, f"只讀到 {len(real)} 組大陸用語，表格格式可能變了"
     assert ("視頻", "影片") in real
     assert ("打印", "列印") in real and ("打印機", "印表機") in real
+    for tech in ("配置文件", "報錯信息", "線程", "回滾", "復盤"):
+        assert scan(tech, real), f"should flag {tech}"
     assert not scan("用戶端與大數據", real) and scan("通過考試的用戶", real)
-    # 台灣常見日常詞不誤報
-    for tw in ("現在線上報名", "濕紙巾", "菠蘿麵包", "非本科轉職", "晶華酒店", "東京地鐵", "脆皮雪糕", "古早味土豆麵筋", "馬鈴薯片", "物理質量"):
+    # 台灣常見日常詞與技術專詞不誤報
+    for tw in (
+        "現在線上報名", "濕紙巾", "菠蘿麵包", "非本科轉職", "晶華酒店", "東京地鐵",
+        "脆皮雪糕", "古早味土豆麵筋", "馬鈴薯片", "物理質量",
+        "閉環控制", "鏈路聚合", "地球內核", "歷史進程", "書法字體", "刷新紀錄",
+    ):
         assert not scan(tw, real), f"TW false positive on {tw}: {scan(tw, real)}"
     # 標了語境的列不掃；長詞優先
     assert ("程序", "程式") not in real and not scan("程序正義與股票代碼", real)
     assert [h[3] for h in scan("視頻通話", real)] == ["模式 34：視頻通話 → 視訊通話"]
+    assert [h[3] for h in scan("檢查配置文件與報錯信息", real)] == [
+        "模式 34：配置文件 → 設定檔",
+        "模式 34：報錯信息 → 錯誤訊息",
+    ]
     assert len(scan("本周末去看展", real)) == 1
     assert not scan("青花菜", real) and scan("花菜", real)
     ctx = load_context_terms()
-    for term in ("代碼", "程序", "酒店", "土豆", "本科", "地鐵", "雪糕", "質量", "菠蘿", "紙巾", "登錄"):
+    for term in (
+        "代碼", "程序", "酒店", "土豆", "本科", "地鐵", "雪糕", "質量", "菠蘿", "紙巾", "登錄",
+        "內核", "進程", "字體", "鏡像", "接口", "刷新", "構建",
+    ):
         assert term in ctx, f"missing context term: {term}"
     print(f"self-test ok（大陸用語表 {len(real)} 組）")
 

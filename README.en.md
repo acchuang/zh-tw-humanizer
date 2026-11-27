@@ -1,7 +1,7 @@
 # zh-tw-humanizer
 
 [![npx skills add](https://img.shields.io/badge/npx_skills_add-acchuang%2Fzh--tw--humanizer-000000)](#installation)
-[![version](https://img.shields.io/badge/skill-v1.10.1-blue)](SKILL.md)
+[![version](https://img.shields.io/badge/skill-v1.11.0-blue)](SKILL.md)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 **繁體中文版 README → [README.md](README.md)** · **Site → [zh-tw-humanizer.oilygold.workers.dev](https://zh-tw-humanizer.oilygold.workers.dev)**
@@ -16,13 +16,13 @@ Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikip
 
 The pitch is that a rewrite changes the voice and nothing else: no invented facts, no lost facts, no over-editing. That is tested, not asserted.
 
-- **33-case eval suite** (`evals/`): blog, tech docs, business email, e-commerce, press release, academic, prompt injection. Seeded numbers, dates, URLs, codes and quotes are checked by regex, so most grading needs no LLM judge.
-- **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.99 vs 0.86**, the skill ahead in 19 of 33 cases, tied in 14, behind in none.
-- **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite (normalizing AI tracking params, with Markdown structure diffs as advisory hints), offline with no API calls. `check.py` also flags leftover simplified characters and high-confidence s2t conversion typos.
-- **Pattern hints**: `python3 scripts/check.py --patterns draft.md` (also works on stdin and alongside `--source`) lists hits on each pattern's watch-words with the pattern number, and flags runs of short sentences or overly uniform sentence and paragraph lengths. Advisory only (never fails); the word list is read from `SKILL.md`.
-- **Vocabulary scan scope**: the 17 context-tagged glossary rows (程序, 質量, 水平, 通過, 地鐵, 酒店, 菠蘿, 土豆, 代碼, 登錄, 運行, 調用, 項目, 支持, 雪糕, 紙巾, 本科) can't be told apart mechanically, so `check.py` skips them (listing any it skipped on stderr) and you judge those by hand. Overlapping terms report once, leftmost and longest (視頻通話 no longer also reports 視頻).
+- **36-case eval suite** (`evals/`): blog, tech docs, business email, e-commerce, press release, academic, prompt injection, mixed human/AI drafts, and voice calibration. Seeded numbers, dates, URLs, codes and quotes are checked by regex, so most grading needs no LLM judge.
+- **Ablation**: every case runs with the skill and against a no-skill baseline. Latest run: mean score **0.99 vs 0.84**, the skill ahead in 26 of 36 cases, tied in 9, behind in 1.
+- **Fact diff**: `python3 scripts/check.py --source orig.md draft.md` reports facts lost from, or invented in, a rewrite (normalizing AI tracking params, with Markdown structure diffs as advisory hints), offline with no API calls. `check.py` also flags leftover simplified characters, high-confidence s2t conversion typos, and half-width punctuation in Chinese prose.
+- **Pattern hints**: `python3 scripts/check.py --patterns draft.md` (also works on stdin and alongside `--source`) lists hits on each pattern's watch-words with the pattern number (plus regex hints for patterns like 不是…而是…, 賦能/深耕, 首先…其次…), and flags runs of short sentences or overly uniform sentence and paragraph lengths. Advisory only (never fails); the word list is read from `SKILL.md`.
+- **Vocabulary scan scope**: the 24 context-tagged glossary rows (程序, 質量, 水平, 通過, 地鐵, 酒店, 菠蘿, 土豆, 代碼, 登錄, 運行, 調用, 項目, 支持, 雪糕, 紙巾, 本科, 內核, 進程, 字體, 鏡像, 接口, 刷新, 構建) can't be told apart mechanically, so `check.py` skips them (listing any it skipped on stderr) and you judge those by hand. Overlapping terms report once, leftmost and longest (視頻通話 no longer also reports 視頻).
 
-Per-case numbers and known weaknesses (short product copy sometimes gets stripped to a single spec line) are in [BENCHMARK.md](BENCHMARK.md). Two runs per arm per case, default model only.
+Per-case numbers and known weaknesses (3 cases dropped one run each on a 2-to-1 LLM judge split) are in [BENCHMARK.md](BENCHMARK.md). Two runs per arm per case, default model only.
 
 ## What it covers
 
@@ -33,16 +33,16 @@ Per-case numbers and known weaknesses (short product copy sometimes gets strippe
 - **Invisible-character cleanup**: zero-width chars (U+200B/200C/200D/FEFF/2060), tag characters (U+E0000–E007F), NBSP and narrow spaces — the provenance markers that survive every copy-paste. Code blocks, URLs, and full-width punctuation stay untouched.
 - **"Rule-flavor" guard**: over-applying the rules produces its own tell (every sentence short, colloquial, and demonstrating a rule). The final pass checks for it and puts some original sentences back.
 - **Taiwan-only localization layer**:
-  - 157 組大陸用語（140 組機器可查，17 組要看語境；另有「台灣也用」不誤殺清單） → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、地鐵→捷運、盒飯→便當…）
+  - 183 組大陸用語（159 組機器可查，24 組要看語境；另有「台灣也用」不誤殺清單，含閉環控制、鏈路聚合、核心 dump 等技術專詞） → 台灣用語對照表（視頻→影片、軟件→軟體、網絡→網路、數據→資料、配置文件→設定檔、線程→執行緒、地鐵→捷運、盒飯→便當…）
   - 簡繁轉換陷阱表（干/乾/幹、后/後、发/發/髮…）與台灣慣用字形（裡、台、線、為、著）
   - 台式語氣：委婉商量式、語助詞（喔/耶/啦/餒/蛤）、句式（還蠻/超/有在/這樣子/的話）、中英夾雜（cancel/confirm/case by case），各限於適合的文體
-- **No-fabrication rule**: rewrites never add facts, names, dates, or citations that aren't in the source text.
+- **No-fabrication & semantic fidelity**: rewrites never add facts, names, dates, or citations that aren't in the source text, and preserve negation, conditions, attribution, and causal/temporal order.
 - **False-positive guidance**: 什麼樣的人類文字不該被改（論文、單一破折號、句中「老實說」、港澳馬新中文…）
-- **Voice calibration**: provide a sample of the author's own writing and the rewrite matches it instead of producing generic "clean" output.
-- **Protected spans**: prices, proper nouns, links, quotes, and legal terms are locked and never touched during rewriting.
-- **Scene-based intensity**: different genres get different treatment (social posts rewritten heavily, technical docs kept conservative). You can also pick the depth: 「輕潤色」 fixes only obvious tells, 「深入重寫」 may restructure paragraphs; protected spans and no-invention hold either way.
+- **Voice calibration**: provide a sample of the author's own writing and the rewrite matches its rhythm and tone while strictly isolating sample facts/stories so they never leak into the output.
+- **Protected spans**: prices, proper nouns, links, quotes, legal terms, and user-specified SEO keywords are locked and never touched during rewriting.
+- **Scene-based intensity**: different genres get different treatment (social posts rewritten heavily, technical docs kept conservative; short product copy keeps natural consumer readability after stripping hype instead of collapsing into a bare spec line). You can also pick the depth: 「輕潤色」 fixes only obvious tells, 「深入重寫」 may restructure paragraphs; protected spans and no-invention hold either way.
 - **Annotation mode**: "先標問題不要改" lists problems without rewriting — for reviewing others' drafts.
-- **Pre-delivery quality self-check**: a 7-item yes/no checklist run before handing over (dashes, mainland vocabulary, simplified-to-traditional errors, invisible characters and quotes, AI-tool residue, protected spans unchanged, no source claim dropped); any failure is fixed before delivery.
+- **Pre-delivery quality self-check**: a 7-item yes/no checklist run before handing over (dashes, mainland vocabulary, simplified-to-traditional errors, invisible characters and quotes / half-width punctuation, AI-tool residue, protected spans unchanged, no source claim dropped); any failure is fixed before delivery.
 
 ## Before / after
 
@@ -144,10 +144,11 @@ Provide a sample of the author's writing and the skill matches sentence rhythm, 
 - **余光中〈怎樣改進英式中文？〉and translationese roundups** — 「最……之一」、「當……的時候」、「對……進行」、redundant 和／以及; direct source of pattern 17. https://zhuanlan.zhihu.com/p/72934908
 - **RAR 設計攻略：去 AI 味怎麼做才有效** — source of the "rule-flavor" guard: over-applied rules create a new tell of their own. https://rar.design/posts/de-ai-flavor-writing-skill-guide
 - **text-watermark-cleaner-zh-tw** (in kevintsai1202/Humanizer-zh-TW) — the zero-width / tag-character / anomalous-whitespace list behind pattern 54. https://github.com/kevintsai1202/Humanizer-zh-TW
+- **Taiwanese zh-TW peer skills** (see [docs/UPSTREAM.md](docs/UPSTREAM.md)) — `slivenred/humanizer-zh-TW-Pro` (voice-sample isolation, semantic fidelity for negation/causality, SEO keyword locking, technical exemptions) and `Raymondhou0917/speak-human-tw` (half-width punctuation checks in Chinese prose).
 
 ### Taiwanese Mandarin style
 
-- **教育部《國語辭典簡編本》附錄：兩岸常用詞語對照表** — authoritative 大陸 vs 台灣 vocabulary pairs (basis of the 157-row localization table). https://dict.concised.moe.edu.tw/appendix.jsp?ID=54
+- **教育部《國語辭典簡編本》附錄：兩岸常用詞語對照表** — authoritative 大陸 vs 台灣 vocabulary pairs (basis of the 183-row localization table). https://dict.concised.moe.edu.tw/appendix.jsp?ID=54
 - **中華語文知識庫：兩岸差異用詞**（中華文化總會） — cross-strait difference-word database. https://chinese-linguipedia.org/search_difference.html
 - **vocus：如何分辨台灣腔？** — 台灣華語特色：輕聲、語助詞、台式詞彙（便當/飯店）、中英夾雜（cancel/confirm/case by case）. https://vocus.cc/article/65f14d07fd8978000132eed9
 - **台味語助詞教學** — 蛤/蝦/餒/唷 等台式語助詞用法。 https://marstininuk.wordpress.com/2018/09/14/台味語助詞教學：輕鬆學會道地台灣腔/
